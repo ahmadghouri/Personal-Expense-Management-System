@@ -35,7 +35,6 @@ class Login extends Controller
 
     function profile(Request $request){
         $user = $request->user();
-        Log::info("user profile", ['user' => $user]);
         return response()->json([
             'user' => $user
         ], 200);

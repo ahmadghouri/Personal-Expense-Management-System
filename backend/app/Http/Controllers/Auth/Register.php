@@ -13,14 +13,14 @@ class Register extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => "required|email|unique:users,email",
-            'password' => "required|string|min:8|max:20",
+            'password' => "required|string|min:5|max:20",
         ]);
 
         $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = $request->password;
-     
+
 
         if($user->save()){
             return response()->json([
