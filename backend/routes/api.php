@@ -1,0 +1,24 @@
+<?php
+
+use App\Http\Controllers\Auth\Forgot;
+use App\Http\Controllers\Auth\Login;
+use App\Http\Controllers\Auth\Register;
+use App\Http\Middleware\AdminCheck;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+Route::post('/login', [Login::class, 'login']);
+
+Route::post('/forgot-password', [Forgot::class, 'sendResetLink']);
+Route::post('/reset-password', [Forgot::class, 'resetPassword']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/register', [Register::class, 'register'])->middleware([AdminCheck::class]);
+    Route::get('/profile',[Login::class, 'profile']);
+    Route::post('/logout', [Login::class, 'logout']);
+
+});
