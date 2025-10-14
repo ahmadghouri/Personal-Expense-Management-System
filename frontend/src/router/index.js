@@ -1,17 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../components/Login.vue";
-import HomePage from "../Pages/HomePage.vue";
 import ForgotPassword from "../components/ForgotPassword.vue";
 import ResetPassword from "../components/ResetPassword.vue";
 import AdminDashboard from "../Pages/AdminDashboard.vue";
 import ManagerDashboard from "../Pages/ManagerDashbord.vue";
 
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: HomePage,
-  },
+
   {
     path: "/login",
     name: "Login",

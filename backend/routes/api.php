@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\Forgot;
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Register;
+use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\AdminCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,4 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile',[Login::class, 'profile']);
     Route::post('/logout', [Login::class, 'logout']);
 
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::post('/categories', [CategoryController::class, 'store'])->middleware([AdminCheck::class]);
+    Route::put('/categories/{id}',[CategoryController::class, 'update'])->middleware([AdminCheck::class]);
+    Route::delete('/categories/{id}',[CategoryController::class, 'destroy']);
 });
