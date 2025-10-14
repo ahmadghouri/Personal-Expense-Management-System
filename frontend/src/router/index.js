@@ -1,74 +1,82 @@
-import { createRouter, createWebHistory, useRoute } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Login from "../components/Login.vue";
 import HomePage from "../Pages/HomePage.vue";
 import ForgotPassword from "../components/ForgotPassword.vue";
 import ResetPassword from "../components/ResetPassword.vue";
 import AdminDashboard from "../Pages/AdminDashboard.vue";
-import ManagerDashbord from "../Pages/ManagerDashbord.vue";
-import useAuth from "../components/useAuth";
+import ManagerDashboard from "../Pages/ManagerDashbord.vue";
 
 const routes = [
-    {
-        path: "/",
-        name:"Home",
-        component:HomePage
-    },
-    {
-        path: "/login",
-        name:"Login",
-        component:Login
-    },
-    {
-        path:'/forgot-password',
-        name:'ForgotPassword',
-        component:ForgotPassword
-    },
-     {
-        path: "/reset-password",
-        name: "ResetPassword",
-        component: ResetPassword
-    },
-     {
-        path: "/admin-dashboard",
-        name: "AdminDashbord",
-        component: AdminDashboard,
-         meta: { requiresAuth: true, role: "admin" }
-    },
-     {
-        path: "/manager-dashboard",
-        name: "ManagerDashboard",
-        component: ManagerDashbord,
-        meta: { requiresAuth: true, role: "manager" }
-    },
-
-]
+  {
+    path: "/",
+    name: "Home",
+    component: HomePage,
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+  },
+  {
+    path: "/forgot-password",
+    name: "ForgotPassword",
+    component: ForgotPassword,
+  },
+  {
+    path: "/reset-password",
+    name: "ResetPassword",
+    component: ResetPassword,
+  },
+  {
+    path: "/admin-dashboard",
+    name: "AdminDashboard",
+    component: AdminDashboard,
+    meta: { requiresAuth: true, role: "admin" },
+  },
+  {
+    path: "/manager-dashboard",
+    name: "ManagerDashboard",
+    component: ManagerDashboard,
+    meta: { requiresAuth: true, role: "manager" },
+  },
+];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes,
+  history: createWebHistory(),
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
-  const user = localStorage.getItem("auth_token");
-  const userRole = localStorage.getItem("user_role");
+  const token = localStorage.getItem("auth_token");
+  const role = localStorage.getItem("user_role");
 
-
-
-//   if (loading.value) {
-//     // Optional: wait or show a loading screen
-//     return;
-//   }
-    // console.log(user.value);
-
-  if (to.meta.requiresAuth && !user) {
-    // Not logged in, redirect to login
-    next({ name: "Login" });
-  } else if (to.meta.role && userRole !== to.meta.role) {
-    // Logged in but wrong role, redirect to home
-    next({ name: "Home" });
-  } else {
-    next();
+  if (
+    (to.name === "Login" ||
+      to.name === "ForgotPassword" ||
+      to.name === "ResetPassword") &&
+    token
+  ) {
+    if (role === "admin") {
+      return next({ name: "AdminDashboard" });
+    } else if (role === "manager") {
+      return next({ name: "ManagerDashboard" });
+    } else {
+      return next({ name: "Home" });
+    }
   }
+ 
+  if (to.meta.requiresAuth && !token) {
+    return next({ name: "Login" });
+  }
+
+  if (to.meta.role && role !== to.meta.role) {
+    if (role === "admin") {
+      return next({ name: "AdminDashboard" });
+    } else {
+      return next({ name: "ManagerDashboard" });
+    }
+  }
+  next();
 });
 
 export default router;

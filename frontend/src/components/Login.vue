@@ -7,44 +7,27 @@
         <!-- Email -->
         <div class="mb-4">
           <label class="block text-gray-700 mb-2" for="email">Email</label>
-          <input
-            v-model="email"
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
+          <input v-model="email" type="email" id="email" placeholder="Enter your email"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
         </div>
 
         <!-- Password -->
         <div class="mb-4">
           <label class="block text-gray-700 mb-2" for="password">Password</label>
-          <input
-            v-model="password"
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
+          <input v-model="password" type="password" id="password" placeholder="Enter your password"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
         </div>
 
         <!-- Forgot Password -->
         <div class="mb-4 text-right">
-          <RouterLink
-            to="/forgot-password"
-            class="text-blue-500 hover:underline text-sm"
-          >
+          <RouterLink to="/forgot-password" class="text-blue-500 hover:underline text-sm">
             Forgot Password?
           </RouterLink>
         </div>
 
         <!-- Login Button -->
-        <button
-          type="submit"
-          class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
-        >
+        <button type="submit"
+          class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
           Login
         </button>
       </form>
@@ -64,16 +47,21 @@ const router = useRouter();
 const email = ref("");
 const password = ref("");
 
-const loginFormHandler = async() =>{
-  const {fetchUser} = useAuth()
+const loginFormHandler = async () => {
+  const { fetchUser } = useAuth()
   try {
- const res = await api.post('/login',{
-      email:email.value,
-      password:password.value
+    const res = await api.post('/login', {
+      email: email.value,
+      password: password.value
     })
-      localStorage.setItem('auth_token', res.data.token);
-      localStorage.setItem('user_role', res.data.user_role);
-      await fetchUser();
+    localStorage.setItem('auth_token', res.data.token);
+    localStorage.setItem('user_role', res.data.user_role);
+    await fetchUser();
+    if (res.data.user_role === 'admin') {
+      router.push({ name: "AdminDashboard" });
+    } else {
+      router.push({ name: "ManagerDashboard" });
+    }
     alert('Login Successful');
   } catch (error) {
     console.log(error);
@@ -85,5 +73,4 @@ const loginFormHandler = async() =>{
 </script>
 
 <style scoped>
-/* Tailwind already handles most styling */
 </style>
