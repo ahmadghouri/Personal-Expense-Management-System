@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\Forgot;
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Register;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DonationController;
+use App\Http\Controllers\DonationTypeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Middleware\AdminCheck;
 use Illuminate\Http\Request;
@@ -32,4 +34,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/expenses', [ExpenseController::class, 'store']);
     Route::put('/expenses/{id}', [ExpenseController::class, 'update']);
     Route::delete('/expenses/{id}', [ExpenseController::class, 'destroy']);
+
+    // Donation Types
+    Route::get('/donation-types', [DonationTypeController::class, 'index']);
+    Route::post('/donation-types', [DonationTypeController::class, 'store'])->middleware([AdminCheck::class]);
+    Route::put('/donation-types/{id}',[DonationTypeController::class, 'update'])->middleware([AdminCheck::class]);
+    Route::delete('/donation-types/{id}',[DonationTypeController::class, 'destroy'])->middleware([AdminCheck::class]);
+
+    // Donations
+    Route::get('/donations', [DonationController::class, 'index']);
+    Route::post('/donations', [DonationController::class, 'store']);
+    Route::put('/donations/{id}',[DonationController::class, 'update']);
+    Route::delete('/donations/{id}',[DonationController::class, 'destroy']);
 });

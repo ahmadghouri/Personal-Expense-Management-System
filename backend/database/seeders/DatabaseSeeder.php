@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\DonationType;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -33,6 +34,20 @@ class DatabaseSeeder extends Seeder
         ]);
         Category::factory()->create([
             "name" => 'Utilities',
+        ]);
+        Category::factory()->create([
+            "name" => 'Donation',
+        ]);
+
+
+        DonationType::factory()->create([
+            "name" => 'Cash'
+        ]);
+        DonationType::factory()->create([
+            "name" => 'Bank Transfer'
+        ]);
+        DonationType::factory()->create([
+            "name" => 'food'
         ]);
 
 
