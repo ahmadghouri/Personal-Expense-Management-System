@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\Forgot;
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Register;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Middleware\AdminCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/categories', [CategoryController::class, 'store'])->middleware([AdminCheck::class]);
     Route::put('/categories/{id}',[CategoryController::class, 'update'])->middleware([AdminCheck::class]);
     Route::delete('/categories/{id}',[CategoryController::class, 'destroy']);
+
+    Route::get('/expenses', [ExpenseController::class, 'index']);
+    Route::post('/expenses', [ExpenseController::class, 'store']);
+    Route::put('/expenses/{id}', [ExpenseController::class, 'update']);
+    Route::delete('/expenses/{id}', [ExpenseController::class, 'destroy']);
 });
