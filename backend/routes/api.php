@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonationTypeController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ReportingController;
 use App\Http\Middleware\AdminCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,13 +23,13 @@ Route::post('/reset-password', [Forgot::class, 'resetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/register', [Register::class, 'register'])->middleware([AdminCheck::class]);
-    Route::get('/profile',[Login::class, 'profile']);
+    Route::get('/profile', [Login::class, 'profile']);
     Route::post('/logout', [Login::class, 'logout']);
 
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/categories', [CategoryController::class, 'store'])->middleware([AdminCheck::class]);
-    Route::put('/categories/{id}',[CategoryController::class, 'update'])->middleware([AdminCheck::class]);
-    Route::delete('/categories/{id}',[CategoryController::class, 'destroy']);
+    Route::put('/categories/{id}', [CategoryController::class, 'update'])->middleware([AdminCheck::class]);
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->middleware([AdminCheck::class]);
 
     Route::get('/expenses', [ExpenseController::class, 'index']);
     Route::post('/expenses', [ExpenseController::class, 'store']);
@@ -38,12 +39,25 @@ Route::middleware('auth:sanctum')->group(function () {
     // Donation Types
     Route::get('/donation-types', [DonationTypeController::class, 'index']);
     Route::post('/donation-types', [DonationTypeController::class, 'store'])->middleware([AdminCheck::class]);
-    Route::put('/donation-types/{id}',[DonationTypeController::class, 'update'])->middleware([AdminCheck::class]);
-    Route::delete('/donation-types/{id}',[DonationTypeController::class, 'destroy'])->middleware([AdminCheck::class]);
+    Route::put('/donation-types/{id}', [DonationTypeController::class, 'update'])->middleware([AdminCheck::class]);
+    Route::delete('/donation-types/{id}', [DonationTypeController::class, 'destroy'])->middleware([AdminCheck::class]);
 
     // Donations
     Route::get('/donations', [DonationController::class, 'index']);
     Route::post('/donations', [DonationController::class, 'store']);
-    Route::put('/donations/{id}',[DonationController::class, 'update']);
-    Route::delete('/donations/{id}',[DonationController::class, 'destroy']);
+    Route::put('/donations/{id}', [DonationController::class, 'update']);
+    Route::delete('/donations/{id}', [DonationController::class, 'destroy']);
+
+    Route::get('/reports/summary', [ReportingController::class, 'summary']);
+    Route::get('/reports/category', [ReportingController::class, 'categoryBreakdown']);
+    Route::get('/reports/summary-category', [ReportingController::class, 'summarizedByCategory']);
+    Route::get('/reports/top-categories', [ReportingController::class, 'topCategories']);
+    Route::get('/reports/drilldown/{categoryId}', [ReportingController::class, 'drillDown']);
+    Route::get('/reports/donation', [ReportingController::class, 'donationBreakdown']);
+    Route::get('/reports/monthly', [ReportingController::class, 'monthlyTrends']);
+    Route::get('/reports/pie', [ReportingController::class, 'expensePieChart']);
+    Route::get('/reports/filter', [ReportingController::class, 'filter']);
+    Route::get('/reports/export-pdf', [ReportingController::class, 'exportPdf']);
+    Route::get('/reports/export-excel', [ReportingController::class, 'exportExcel']);
+
 });
