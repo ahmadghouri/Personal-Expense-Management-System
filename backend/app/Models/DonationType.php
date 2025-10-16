@@ -10,9 +10,10 @@ class DonationType extends Model
     //
     use HasFactory;
 
-    protected $fillable = ['name' , 'description'];
+    protected $fillable = ['name', 'description'];
 
-    public function donations(){
+    public function donations()
+    {
         return $this->hasMany(Donation::class);
     }
 }

@@ -8,33 +8,37 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     //
-    public function index (){
-        $categories = Category::orderBy('id' , 'desc')->get();
+    public function index()
+    {
+        $categories = Category::orderBy('id', 'desc')->get();
+
         return response()->json($categories);
     }
 
-    public function store(Request $request){
-        $request -> validate([
-            'name' => "required",
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
             'description' => 'nullable|string',
         ]);
 
         $category = Category::create([
             'name' => $request->name,
             'description' => $request->description,
-            'is_active' => true
+            'is_active' => true,
         ]);
 
         return response()->json([
             'message' => 'category created successfully',
-            'category' => $category
-        ],201);
+            'category' => $category,
+        ], 201);
     }
 
-    public function update(Request $request , $id){
+    public function update(Request $request, $id)
+    {
         $category = Category::findOrFail($id);
-        $request -> validate([
-            'name' => 'required|string|unique:categories,name,' . $id,
+        $request->validate([
+            'name' => 'required|string|unique:categories,name,'.$id,
             'description' => 'nullable|string',
         ]);
 
@@ -46,15 +50,17 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'category updated successfully',
-            'category' => $category
-        ],200);
+            'category' => $category,
+        ], 200);
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $category = Category::findOrFail($id);
         $category->delete();
+
         return response()->json([
             'message' => 'category deleted successfully',
-        ],200);
+        ], 200);
     }
 }

@@ -16,12 +16,12 @@ class AuthCheck
      */
     public function handle(Request $request, Closure $next): Response
     {
-  {
-        if (!Auth::check()) {
+
+        if (! Auth::check()) {
             return response()->json(['message' => 'Unauthorized. Please login first.'], 401);
         }
 
         return $next($request);
-    }
+
     }
 }

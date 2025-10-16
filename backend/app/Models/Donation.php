@@ -10,7 +10,7 @@ class Donation extends Model
     //
     use HasFactory;
 
-    protected $fillable =[
+    protected $fillable = [
         'user_id',
         'category_id',
         'donation_type_id',
@@ -22,15 +22,18 @@ class Donation extends Model
         'proof',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function donationType(){
+    public function donationType()
+    {
         return $this->belongsTo(DonationType::class);
     }
 }

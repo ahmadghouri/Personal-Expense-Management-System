@@ -10,21 +10,22 @@ use Illuminate\Support\Facades\Storage;
 class DonationController extends Controller
 {
     //
-    public function index () {
+    public function index()
+    {
         $user = Auth::user();
-        if($user->role === 'admin'){
-            $donations = Donation::with(['category','user','donationType'])->get();
-        }
-        else{
-            $donations = Donation::with(['category' , 'user', 'donationType'])->where('user_id', $user->id)->latest()->get();
+        if ($user->role === 'admin') {
+            $donations = Donation::with(['category', 'user', 'donationType'])->get();
+        } else {
+            $donations = Donation::with(['category', 'user', 'donationType'])->where('user_id', $user->id)->latest()->get();
         }
 
         return response()->json([
-            'donations' => $donations
+            'donations' => $donations,
         ]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'donation_type_id' => 'required|exists:donation_types,id',
@@ -39,8 +40,8 @@ class DonationController extends Controller
 
         $path = null;
 
-        if($request->hasFile('proof')){
-            $path = $request->file('proof')->store('donations','public');
+        if ($request->hasFile('proof')) {
+            $path = $request->file('proof')->store('donations', 'public');
         }
 
         $donation = Donation::create([
@@ -58,19 +59,20 @@ class DonationController extends Controller
 
         return response()->json([
             'message' => 'Donation added successfully',
-            'donation' => $donation->load(['category', 'donationType'])
+            'donation' => $donation->load(['category', 'donationType']),
 
         ]);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $donation = Donation::findOrFail($id);
 
-        if(Auth::user()->role !== "admin" && $donation->user_id !== Auth::id()){
-                    return response()->json(['error' => 'Unauthorized'], 403);
-        };
+        if (Auth::user()->role !== 'admin' && $donation->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
 
-         $request->validate([
+        $request->validate([
             'category_id' => 'required|exists:categories,id',
             'donation_type_id' => 'required|exists:donation_types,id',
             'donation_date' => 'required|date',
@@ -82,26 +84,28 @@ class DonationController extends Controller
         ]);
 
         if ($request->hasFile('proof')) {
-        if ($donation->proof && Storage::disk('public')->exists($donation->proof)) {
+            if ($donation->proof && Storage::disk('public')->exists($donation->proof)) {
                 Storage::disk('public')->delete($donation->proof);
             }
             $donation->proof = $request->file('proof')->store('donations', 'public');
-        };
+        }
         $donation->update($request->except('proof'));
+
         return response()->json(['message' => 'Donation updated successfully']);
     }
 
-        public function destroy($id){
-            $donation = Donation::findOrFail($id);
+    public function destroy($id)
+    {
+        $donation = Donation::findOrFail($id);
 
-            if(Auth::user()->role !== 'admin' && $donation->user_id !== Auth::id()){
-                return response()->json(['error' => 'Unauthorized'], 403);
-            }
-            if($donation->proof && Storage::disk('public')->exists($donation->proof)){
-                Storage::disk('public')->delete($donation->proof);
-            }
-            if($donation->delete()){
-            return response()->json(['message' => 'Donation deleted successfully']);
-            }
+        if (Auth::user()->role !== 'admin' && $donation->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
         }
+        if ($donation->proof && Storage::disk('public')->exists($donation->proof)) {
+            Storage::disk('public')->delete($donation->proof);
+        }
+        if ($donation->delete()) {
+            return response()->json(['message' => 'Donation deleted successfully']);
+        }
+    }
 }

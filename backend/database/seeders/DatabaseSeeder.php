@@ -18,38 +18,36 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         Category::factory()->create([
-            "name" => 'Grocery'
+            'name' => 'Grocery',
         ]);
         Category::factory()->create([
-            "name" => 'Fruits'
+            'name' => 'Fruits',
         ]);
         Category::factory()->create([
-            "name" => 'Meat'
+            'name' => 'Meat',
         ]);
         Category::factory()->create([
-            "name" => 'Transport'
+            'name' => 'Transport',
         ]);
         Category::factory()->create([
-            "name" => 'Rent'
+            'name' => 'Rent',
         ]);
         Category::factory()->create([
-            "name" => 'Utilities',
+            'name' => 'Utilities',
         ]);
         Category::factory()->create([
-            "name" => 'Donation',
+            'name' => 'Donation',
         ]);
 
-
         DonationType::factory()->create([
-            "name" => 'Cash'
+            'name' => 'Cash',
         ]);
         DonationType::factory()->create([
-            "name" => 'Bank Transfer'
+            'name' => 'Bank Transfer',
         ]);
         DonationType::factory()->create([
-            "name" => 'food'
+            'name' => 'food',
         ]);
-
 
         User::factory()->create([
             'name' => 'Test Admin',

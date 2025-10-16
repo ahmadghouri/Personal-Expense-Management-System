@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class Forgot extends Controller
@@ -14,7 +14,7 @@ class Forgot extends Controller
     public function sendResetLink(Request $request)
     {
         $request->validate([
-            'email' => 'required|email'
+            'email' => 'required|email',
         ]);
 
         $status = Password::sendResetLink(
@@ -34,7 +34,7 @@ class Forgot extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:5|confirmed'
+            'password' => 'required|min:5|confirmed',
         ]);
 
         $status = Password::reset(

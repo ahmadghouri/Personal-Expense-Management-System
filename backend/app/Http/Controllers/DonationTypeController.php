@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Donation;
 use App\Models\DonationType;
 use Illuminate\Http\Request;
 
 class DonationTypeController extends Controller
 {
     //
-    public function index(){
+    public function index()
+    {
         $type = DonationType::orderBy('id', 'asc')->get();
+
         return response()->json($type);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|unique:donation_types,name',
             'description' => 'nullable|string',
@@ -22,20 +24,21 @@ class DonationTypeController extends Controller
 
         $type = DonationType::create([
             'name' => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
         ]);
 
         return response()->json([
             'message' => 'Donation type created successfully',
-            'data' => $type
+            'data' => $type,
         ]);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $type = DonationType::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255|unique:donation_types,name,' . $id,
+            'name' => 'required|string|max:255|unique:donation_types,name,'.$id,
             'description' => 'nullable|string',
         ]);
         $type->update([
@@ -45,16 +48,15 @@ class DonationTypeController extends Controller
 
         return response()->json([
             'message' => 'Donation type updated successfully',
-            'data' => $type
+            'data' => $type,
         ]);
     }
 
-        public function destroy($id)
+    public function destroy($id)
     {
         $type = DonationType::findOrFail($id);
         $type->delete();
 
         return response()->json(['message' => 'Donation Type deleted successfully']);
     }
-
 }
