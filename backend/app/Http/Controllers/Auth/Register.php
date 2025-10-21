@@ -15,12 +15,14 @@ class Register extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:5|max:20',
+            'role' => 'required|in:admin,manager',
         ]);
 
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
+        $user->role = $request->role;
 
         if ($user->save()) {
             return response()->json([

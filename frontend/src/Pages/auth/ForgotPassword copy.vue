@@ -11,27 +11,19 @@
         <!-- Email -->
         <div class="mb-4">
           <label class="block text-gray-700 mb-2" for="email">Email</label>
-          <input
-            v-model="email"
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
+          <input v-model="email" type="email" id="email" placeholder="Enter your email"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
         </div>
 
         <!-- Submit Button -->
-        <button
-          type="submit"
-          class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
-        >
+        <button type="submit"
+          class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
           Send Reset Link
         </button>
       </form>
 
       <div class="mt-4 text-center">
-        <RouterLink to="/login" class="text-blue-500 hover:underline text-sm">
+        <RouterLink to="/" class="text-blue-500 hover:underline text-sm">
           Back to Login
         </RouterLink>
       </div>
@@ -51,6 +43,8 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 const email = ref("");
 const message = ref("");
@@ -59,14 +53,15 @@ const error = ref("");
 const sendResetLink = async () => {
   message.value = "";
   error.value = "";
-  
+
   try {
     const response = await axios.post("http://backend.test/api/forgot-password", {
       email: email.value
     });
-
+    toast.success(response.data.message || "Reset link sent! Check your email.")
     message.value = response.data.message || "Reset link sent! Check your email.";
   } catch (err) {
+    toast.error(err.response?.data?.message || "Something went wrong!")
     error.value = err.response?.data?.message || "Something went wrong!";
   }
 };

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\Admin;
 use App\Http\Controllers\Auth\Forgot;
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Register;
@@ -25,6 +26,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/register', [Register::class, 'register'])->middleware([AdminCheck::class]);
     Route::get('/profile', [Login::class, 'profile']);
     Route::post('/logout', [Login::class, 'logout']);
+
+    Route::get('/admin/users', [Admin::class, 'index'])->middleware([AdminCheck::class]);
+    Route::put('/admin/users/{id}', [Admin::class, 'updata'])->middleware([AdminCheck::class]);
+    Route::delete('/admin/users/{id}', [Admin::class, 'delete'])->middleware([AdminCheck::class]);
 
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/categories', [CategoryController::class, 'store'])->middleware([AdminCheck::class]);

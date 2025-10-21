@@ -1,5 +1,7 @@
 import { ref } from "vue";
 import api from "../Api/AxiosBase";
+import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
 
 const user = ref(null);
 const role = ref(localStorage.getItem("user_role") || null);
@@ -7,6 +9,9 @@ const loading = ref(true);
 const error = ref(null);
 
 export default function useAuth() {
+  const toast = useToast();
+  const router = useRouter();
+
   const fetchUser = async () => {
     try {
       loading.value = true;
@@ -27,5 +32,18 @@ export default function useAuth() {
     }
   };
 
-  return { user, role, loading, error, fetchUser };
+  const logout = async () => {
+    try {
+      await api.post("logout");
+    } catch (e) {
+      console.error(e);
+    } finally {
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("user_role");
+      toast.success("✅ User logged out");
+      router.push({ name: "Login" });
+    }
+  };
+
+  return { user, role, loading, error, fetchUser, logout };
 }

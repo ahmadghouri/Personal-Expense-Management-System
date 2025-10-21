@@ -39,7 +39,9 @@
 <script setup>
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import api from '../Api/AxiosBase';
+import api from '../../Api/AxiosBase';
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 const route = useRoute();
 const router = useRouter();
@@ -57,9 +59,10 @@ const submitReset = async () => {
             password: password.value,
             password_confirmation: password_confirmation.value
         });
-        alert('Password reset successful!');
-        router.push('/login');
+        toast.success('Password reset successful!');
+        router.push('/');
     } catch (err) {
+        toast.error(err.response?.data?.message || "Something went wrong!")
         console.error(err.response.data.message);
     }
 };
