@@ -15,6 +15,15 @@ class CategoryController extends Controller
         return response()->json($categories);
     }
 
+    public function show()
+    {
+         $categories = Category::withCount('expenses')
+        ->withSum('expenses', 'amount')
+        ->get();
+
+        return response()->json($categories);
+    }
+
     public function store(Request $request)
     {
         $request->validate([

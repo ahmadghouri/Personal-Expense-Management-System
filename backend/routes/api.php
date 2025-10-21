@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/admin/users/{id}', [Admin::class, 'delete'])->middleware([AdminCheck::class]);
 
     Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/expenses', [CategoryController::class, 'show'])->middleware([AdminCheck::class]);
     Route::post('/categories', [CategoryController::class, 'store'])->middleware([AdminCheck::class]);
     Route::put('/categories/{id}', [CategoryController::class, 'update'])->middleware([AdminCheck::class]);
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->middleware([AdminCheck::class]);
