@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Donation Types
     Route::get('/donation-types', [DonationTypeController::class, 'index']);
+    Route::get('/donation-types/donations', [DonationTypeController::class, 'show'])->middleware([AdminCheck::class]);
     Route::post('/donation-types', [DonationTypeController::class, 'store'])->middleware([AdminCheck::class]);
     Route::put('/donation-types/{id}', [DonationTypeController::class, 'update'])->middleware([AdminCheck::class]);
     Route::delete('/donation-types/{id}', [DonationTypeController::class, 'destroy'])->middleware([AdminCheck::class]);
