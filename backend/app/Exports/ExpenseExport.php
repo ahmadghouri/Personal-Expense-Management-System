@@ -15,7 +15,7 @@ class ExpenseExport implements FromView
 
     public function __construct(Request $request)
     {
-        Log::info('Export request received', $request->request());
+        Log::info('Export request received', $request->only(['start_date', 'end_date', 'category_id', 'caz']));
         $this->request = $request;
     }
 
@@ -24,11 +24,9 @@ class ExpenseExport implements FromView
         $user = Auth::user();
         $query = Expense::with('category');
 
-
         if ($user->role === 'manager') {
             $query->where('user_id', $user->id);
         }
-
 
         if ($this->request->filled('start_date') && $this->request->filled('end_date')) {
             $query->whereBetween('expense_date', [
@@ -37,15 +35,15 @@ class ExpenseExport implements FromView
             ]);
         }
 
-
         if ($this->request->filled('category_id')) {
             $query->where('category_id', $this->request->category_id);
         }
 
-
         if ($this->request->filled('caz')) {
-            $query->where('caz', 'like', '%'.$this->request->caz.'%');
+            $query->where('caz', 'like', '%' . $this->request->caz . '%');
         }
+
+        $query->orderByDesc('expense_date');
 
         $expenses = $query->get();
 
@@ -54,3 +52,5 @@ class ExpenseExport implements FromView
         ]);
     }
 }
+
+
