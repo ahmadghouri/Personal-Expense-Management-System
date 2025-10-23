@@ -102,8 +102,8 @@ const deleteExpense = async (id) => {
           <tr>
             <th class="px-4 py-3 text-left font-semibold">Date</th>
             <th class="px-4 py-3 text-left font-semibold">Category</th>
-            <!-- <th class="px-4 py-3 text-left font-semibold">Description</th> -->
-            <th class="px-4 py-3 text-left font-semibold">User</th>
+            <th class="px-4 py-3 text-left font-semibold">Description</th>
+            <!-- <th class="px-4 py-3 text-left font-semibold">User</th> -->
             <th class="px-4 py-3 text-left font-semibold">Payment Mode</th>
             <th class="px-4 py-3 text-right font-semibold">Amount</th>
             <th class="px-4 py-3 text-center font-semibold">Actions</th>
@@ -127,15 +127,15 @@ const deleteExpense = async (id) => {
               </div>
             </td>
 
-            <!-- <td class="px-4 py-3 text-slate-600">
+            <td class="px-4 py-3 text-slate-600">
               {{ expense.description || '-' }}
-            </td> -->
+            </td>
 
-            <td class="px-4 py-3">
+            <!-- <td class="px-4 py-3">
               <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
                 {{ expense.user.name }}
               </span>
-            </td>
+            </td> -->
 
             <td class="px-4 py-3">
               <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">

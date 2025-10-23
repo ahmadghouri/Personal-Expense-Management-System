@@ -20,6 +20,8 @@ import AdminUser from "../Pages/admin/User.vue"
 // 🔹 Manager Pages
 import ManagerDashboard from "../Pages/manager/Dashboard.vue";
 import ManagerReports from "../Pages/manager/Reports.vue";
+import ManagerExpenses from "../Pages/manager/Expenses.vue";
+import ManagerDonation from "../Pages/manager/Donation.vue";
 // import ManagerReports from "../Pages/manager/Reports.vue";
 
 const routes = [
@@ -52,7 +54,8 @@ const routes = [
     meta: { requiresAuth: true, role: "manager" },
     children: [
       { path: "dashboard", name: "ManagerDashboard", component: ManagerDashboard },
-      // { path: "expenses", name: "ManagerExpenses", component: ManagerExpenses },
+      { path: "expenses", name: "ManagerExpenses", component: ManagerExpenses },
+      { path: "donation", name: "ManagerDonation", component: ManagerDonation },
       { path: "reports", name: "ManagerReports", component: ManagerReports  },
     ],
   },

@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import api from '../../Api/AxiosBase'
-import DonationShow from '../../components/admin/donation/DonationShow.vue'
-import DonationCreate from '../../components/admin/donation/DonationCreate.vue'
+import DonationShow from '../../components/manager/donation/DonationShow.vue'
+import DonationCreate from '../../components/manager/donation/DonationCreate.vue'
 
 const showModal = ref(false)
 const editMode = ref(false)

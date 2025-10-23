@@ -1,36 +1,53 @@
+<script setup>
+import useAuth from "../components/useAuth";
+const { logout } = useAuth();
+
+const navLink = [
+  { to: '/manager/dashboard', name: "Dashboard" },
+  { to: '/manager/expenses', name: "Expenses" },
+  { to: '/manager/donation', name: "Donation" },
+  { to: '/manager/reports', name: "Reports" },
+];
+</script>
+
 <template>
-  <div class="flex min-h-screen bg-gray-100">
+  <div class="flex h-screen bg-gray-100">
     <!-- Sidebar -->
-    <aside
-      class="w-64 bg-blue-800 text-white p-4 fixed h-full overflow-y-auto"
-    >
-      <h2 class="text-xl font-bold mb-4">Manager Panel</h2>
-      <ul class="space-y-2">
-        <li>
-          <router-link to="/manager/dashboard" class="hover:text-yellow-400">
-            Dashboard
+    <div class="w-64 bg-gray-900 text-white p-6 flex-shrink-0 shadow-lg overflow-y-auto">
+      <h2 class="text-2xl font-semibold mb-6 border-b border-gray-700 pb-2">
+        Manager Panel
+      </h2>
+      <ul class="space-y-4">
+        <li
+          v-for="(link, index) in navLink"
+          :key="index"
+          class="flex items-center gap-3"
+        >
+          <router-link
+            :to="link.to"
+            class="flex-1 px-4 py-2 rounded-md font-medium transition-colors duration-200"
+            :class="{
+              'bg-amber-600 text-white': $route.path === link.to,
+              'bg-gray-800 text-white hover:bg-amber-600 hover:text-white': $route.path !== link.to
+            }"
+          >
+            {{ link.name }}
           </router-link>
         </li>
-        <li>
-          <router-link to="/manager/reports" class="hover:text-yellow-400">
-            Reports
-          </router-link>
-        </li>
-        <li @click="logout" class="hover:text-yellow-400 cursor-pointer">
-          Logout
+
+        <li
+          class="flex items-center gap-3 px-4 py-2 rounded-md bg-gray-800 hover:bg-amber-600 hover:text-white transition-colors duration-200 cursor-pointer"
+          @click="logout"
+        >
+          <span class="flex-1 text-white font-medium">Logout</span>
         </li>
       </ul>
-    </aside>
+    </div>
 
     <!-- Main Content -->
-    <main class="flex-1 p-6 ml-64 overflow-y-auto h-screen">
+    <main class="flex-1 p-6 overflow-y-auto">
       <header class="text-lg font-semibold mb-4">Manager Dashboard</header>
       <router-view />
     </main>
   </div>
 </template>
-
-<script setup>
-import useAuth from "../components/useAuth";
-const { logout } = useAuth();
-</script>

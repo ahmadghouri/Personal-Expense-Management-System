@@ -10,13 +10,17 @@ use Illuminate\Support\Facades\Storage;
 class DonationController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
+
         $user = Auth::user();
+
+         $perPage = $request->get('per_page', 10);
+
         if ($user->role === 'admin') {
-            $donations = Donation::with(['category', 'user', 'donationType'])->get();
+            $donations = Donation::with(['category', 'user', 'donationType'])->paginate($perPage);;
         } else {
-            $donations = Donation::with(['category', 'user', 'donationType'])->where('user_id', $user->id)->latest()->get();
+            $donations = Donation::with(['category', 'user', 'donationType'])->where('user_id', $user->id)->latest()->paginate($perPage);
         }
 
         return response()->json([
@@ -27,7 +31,7 @@ class DonationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            // 'category_id' => 'required|exists:categories,id',
             'donation_type_id' => 'required|exists:donation_types,id',
             'donation_date' => 'required|date',
             'amount' => 'nullable|numeric|min:0',
