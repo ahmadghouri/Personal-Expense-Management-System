@@ -1,45 +1,38 @@
 <template>
-  <div class="p-6 space-y-6">
-    <!-- Welcome Message -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h1 class="text-3xl font-bold text-gray-800">👋 Welcome, Manager!</h1>
-      <p class="text-gray-600 mt-2">
-        Here's a quick overview of your recent expenses and donations.
-      </p>
+  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 md:p-8 rounded-md">
+    <!-- Header Section with Gradient -->
+
+    <div class="relative z-10">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">Manager Dashboard</h1>
     </div>
 
-    <!-- Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-indigo-100 border-l-4 border-indigo-500 p-4 rounded shadow">
-        <h2 class="text-lg font-semibold text-indigo-700">Total Expenses</h2>
-        <p class="text-2xl font-bold text-indigo-900">Rs. 37,000</p>
-      </div>
-      <div class="bg-green-100 border-l-4 border-green-500 p-4 rounded shadow">
-        <h2 class="text-lg font-semibold text-green-700">Donations (Cash)</h2>
-        <p class="text-2xl font-bold text-green-900">Rs. 10,000</p>
-      </div>
-      <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded shadow">
-        <h2 class="text-lg font-semibold text-yellow-700">Donations (Food)</h2>
-        <p class="text-2xl font-bold text-yellow-900">Rs. 5,000</p>
-      </div>
-    </div>
 
-    <!-- Chart Placeholders -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white border rounded-lg p-4 text-center text-gray-400">
-        📊 Monthly Expense Trend (Chart Coming Soon)
-      </div>
-      <div class="bg-white border rounded-lg p-4 text-center text-gray-400">
-        🧾 Category Breakdown (Chart Coming Soon)
-      </div>
-    </div>
+    <!-- Summary Cards with Glassmorphism -->
+    <DashboardOverall/>
+
+    <!-- Filters Section with Modern Design -->
+
+    <!-- Charts Grid -->
+    <DashboardBreakdown />
+
+
+    <!-- Monthly Trends Table -->
+    <DashboardMonthly/>
+
+    <!-- Expense Distribution Cards -->
+
+
+    <!-- Export Buttons with Animations -->
+
   </div>
 </template>
 
 <script setup>
-// Future logic: fetch summary data, render charts
-</script>
 
-<style scoped>
-/* Optional animations or transitions can be added here */
-</style>
+import DashboardBreakdown from '../../components/manager/dashboard/DashboardBreakdown.vue';
+import DashboardOverall from '../../components/manager/dashboard/DashboardOverall.vue';
+import DashboardMonthly from '../../components/manager/dashboard/DashboardMonthly.vue';
+
+
+
+</script>

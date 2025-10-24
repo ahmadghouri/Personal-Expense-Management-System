@@ -517,62 +517,62 @@ class ReportingController extends Controller
 
     public function expensePieChart(Request $request)
     {
-        // $user = Auth::user();
+        $user = Auth::user();
 
-        // $query = Expense::select(
-        //     'categories.name as category',
-        //     DB::raw('SUM(expenses.amount) as total')
-        // )
-        //     ->join('categories', 'expenses.category_id', '=', 'categories.id')
-        //     ->groupBy('categories.name');
+        $query = Expense::select(
+            'categories.name as category',
+            DB::raw('SUM(expenses.amount) as total')
+        )
+            ->join('categories', 'expenses.category_id', '=', 'categories.id')
+            ->groupBy('categories.name');
 
-        // if ($user->role === 'manager') {
-        //     $query->where('expenses.user_id', $user->id);
-        // }
+        if ($user->role === 'manager') {
+            $query->where('expenses.user_id', $user->id);
+        }
 
-        // if ($request->start_date && $request->end_date) {
-        //     $query->whereBetween('expenses.expense_date', [$request->start_date, $request->end_date]);
-        // }
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('expenses.expense_date', [$request->start_date, $request->end_date]);
+        }
 
-        // $data = $query->get();
+        $data = $query->get();
 
-        // $total = $data->sum('total');
-        // $pieData = $data->map(function ($item) use ($total) {
-        //     $item->percentage = $total > 0 ? round(($item->total / $total) * 100, 2) : 0;
+        $total = $data->sum('total');
+        $pieData = $data->map(function ($item) use ($total) {
+            $item->percentage = $total > 0 ? round(($item->total / $total) * 100, 2) : 0;
 
-        //     return $item;
-        // });
+            return $item;
+        });
 
-        // return response()->json($pieData);
+        return response()->json($pieData);
 
-         $user = Auth::user();
+    //      $user = Auth::user();
 
-    $query = Expense::select(
-        'categories.name as category',
-        DB::raw('SUM(expenses.amount) as total')
-    )
-    ->join('categories', 'expenses.category_id', '=', 'categories.id')
-    ->groupBy('categories.name')
-    ->orderByDesc('total');
+    // $query = Expense::select(
+    //     'categories.name as category',
+    //     DB::raw('SUM(expenses.amount) as total')
+    // )
+    // ->join('categories', 'expenses.category_id', '=', 'categories.id')
+    // ->groupBy('categories.name')
+    // ->orderByDesc('total');
 
-    if ($user->role === 'manager') {
-        $query->where('expenses.user_id', $user->id);
-    }
+    // if ($user->role === 'manager') {
+    //     $query->where('expenses.user_id', $user->id);
+    // }
 
-    if ($request->filled(['start_date', 'end_date'])) {
-        $query->whereBetween('expenses.expense_date', [$request->start_date, $request->end_date]);
-    }
+    // if ($request->filled(['start_date', 'end_date'])) {
+    //     $query->whereBetween('expenses.expense_date', [$request->start_date, $request->end_date]);
+    // }
 
-    $data = $query->get();
-    $total = $data->sum('total');
+    // $data = $query->get();
+    // $total = $data->sum('total');
 
-    $pieData = $data->map(function ($item) use ($total) {
-        return [
-            'category' => $item->category,
-            'total' => (float) $item->total,
-            'percentage' => $total > 0 ? round(($item->total / $total) * 100, 2) : 0,
-        ];
-    });
+    // $pieData = $data->map(function ($item) use ($total) {
+    //     return [
+    //         'category' => $item->category,
+    //         'total' => (float) $item->total,
+    //         'percentage' => $total > 0 ? round(($item->total / $total) * 100, 2) : 0,
+    //     ];
+    // });
 
     return response()->json($pieData);
     }
