@@ -9,14 +9,17 @@ use Illuminate\Http\Request;
 class Admin extends Controller
 {
     //
-    public function index(){
+    public function index()
+    {
         $user = User::all();
+
         return response()->json($user);
     }
 
-    public function updata(Request $request , $id){
+    public function updata(Request $request, $id)
+    {
         $user = User::find($id);
-        if(!$user){
+        if (! $user) {
             return response()->json(['message' => 'user not found'], 404);
         }
 
@@ -34,13 +37,14 @@ class Admin extends Controller
         return response()->json(['message' => 'Failed to update user'], 500);
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $user = User::find($id);
-        if(!$user){
+        if (! $user) {
             return response()->json(['message' => 'user not found'], 404);
         }
 
-        if($user->delete()){
+        if ($user->delete()) {
             return response()->json([
                 'message' => 'user deleted successfully',
                 'user' => $user,
@@ -49,5 +53,4 @@ class Admin extends Controller
 
         return response()->json(['message' => 'Failed to delete user'], 500);
     }
-
 }

@@ -10,25 +10,25 @@ use Illuminate\Support\Facades\Storage;
 class ExpenseController extends Controller
 {
     public function index(Request $request)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Get page size (default 10)
-    $perPage = $request->get('per_page', 10);
+        // Get page size (default 10)
+        $perPage = $request->get('per_page', 10);
 
-    if ($user->role === 'admin') {
-        $expenses = Expense::with('category', 'user')
-            ->latest()
-            ->paginate($perPage);
-    } else {
-        $expenses = Expense::with('category', 'user')
-            ->where('user_id', $user->id)
-            ->latest()
-            ->paginate($perPage);
+        if ($user->role === 'admin') {
+            $expenses = Expense::with('category', 'user')
+                ->latest()
+                ->paginate($perPage);
+        } else {
+            $expenses = Expense::with('category', 'user')
+                ->where('user_id', $user->id)
+                ->latest()
+                ->paginate($perPage);
+        }
+
+        return response()->json($expenses);
     }
-
-    return response()->json($expenses);
-}
 
     // public function index()
     // {
@@ -92,40 +92,38 @@ class ExpenseController extends Controller
     //     return response()->json(['message' => 'Expense updated successfully']);
     // }
 
-public function update(Request $request, $id)
-{
-    $expense = Expense::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        $expense = Expense::findOrFail($id);
 
-    if (Auth::user()->role !== 'admin' && $expense->user_id !== Auth::id()) {
-        return response()->json(['error' => 'Unauthorized'], 403);
+        if (Auth::user()->role !== 'admin' && $expense->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'expense_date' => 'required|date',
+            'amount' => 'required|numeric|min:0',
+            'payment_mode' => 'required|string|in:Cash,Credit Card,Debit Card,Bank Transfer,Mobile Wallet',
+        ]);
+
+        $expense->update([
+            'category_id' => $request->category_id,
+            'expense_date' => $request->expense_date,
+            'amount' => $request->amount,
+            'payment_mode' => $request->payment_mode,
+            'description' => $request->description,
+            'subcategory' => $request->subcategory,
+        ]);
+
+        if ($request->hasFile('attachment')) {
+            $path = $request->file('attachment')->store('attachments', 'public');
+            $expense->attachment = $path;
+            $expense->save();
+        }
+
+        return response()->json(['message' => 'Expense updated successfully']);
     }
-
-    $request->validate([
-        'category_id'   => 'required|exists:categories,id',
-        'expense_date'  => 'required|date',
-        'amount'        => 'required|numeric|min:0',
-        'payment_mode'  => 'required|string|in:Cash,Credit Card,Debit Card,Bank Transfer,Mobile Wallet',
-    ]);
-
-    $expense->update([
-        'category_id'   => $request->category_id,
-        'expense_date'  => $request->expense_date,
-        'amount'        => $request->amount,
-        'payment_mode'  => $request->payment_mode,
-        'description'   => $request->description,
-        'subcategory'   => $request->subcategory,
-    ]);
-
-    if ($request->hasFile('attachment')) {
-        $path = $request->file('attachment')->store('attachments', 'public');
-        $expense->attachment = $path;
-        $expense->save();
-    }
-
-    return response()->json(['message' => 'Expense updated successfully']);
-}
-
-
 
     public function destroy($id)
     {

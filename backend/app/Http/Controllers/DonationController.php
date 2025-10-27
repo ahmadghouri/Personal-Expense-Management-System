@@ -15,10 +15,10 @@ class DonationController extends Controller
 
         $user = Auth::user();
 
-         $perPage = $request->get('per_page', 10);
+        $perPage = $request->get('per_page', 10);
 
         if ($user->role === 'admin') {
-            $donations = Donation::with(['category', 'user', 'donationType'])->paginate($perPage);;
+            $donations = Donation::with(['category', 'user', 'donationType'])->paginate($perPage);
         } else {
             $donations = Donation::with(['category', 'user', 'donationType'])->where('user_id', $user->id)->latest()->paginate($perPage);
         }

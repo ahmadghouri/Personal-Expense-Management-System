@@ -17,9 +17,9 @@ class CategoryController extends Controller
 
     public function show()
     {
-         $categories = Category::withCount('expenses')
-        ->withSum('expenses', 'amount')
-        ->get();
+        $categories = Category::withCount('expenses')
+            ->withSum('expenses', 'amount')
+            ->get();
 
         return response()->json($categories);
     }

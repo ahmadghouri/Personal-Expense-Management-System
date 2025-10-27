@@ -40,7 +40,7 @@ class ExpenseExport implements FromView
         }
 
         if ($this->request->filled('caz')) {
-            $query->where('caz', 'like', '%' . $this->request->caz . '%');
+            $query->where('caz', 'like', '%'.$this->request->caz.'%');
         }
 
         $query->orderByDesc('expense_date');
@@ -52,5 +52,3 @@ class ExpenseExport implements FromView
         ]);
     }
 }
-
-

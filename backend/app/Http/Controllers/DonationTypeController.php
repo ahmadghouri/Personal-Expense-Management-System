@@ -14,14 +14,16 @@ class DonationTypeController extends Controller
 
         return response()->json($type);
     }
-   public function show()
+
+    public function show()
     {
-         $donations = DonationType::withCount('donations')
-        ->withSum('donations', 'amount')
-        ->get();
+        $donations = DonationType::withCount('donations')
+            ->withSum('donations', 'amount')
+            ->get();
 
         return response()->json($donations);
     }
+
     public function store(Request $request)
     {
         $request->validate([
