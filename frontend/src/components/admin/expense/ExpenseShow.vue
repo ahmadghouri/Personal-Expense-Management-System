@@ -1,50 +1,3 @@
-<!-- <script setup>
-import api from '../../../Api/AxiosBase';
-import { useToast } from 'vue-toastification'
-const toast = useToast()
-
-const baseUrl = api.defaults.baseURL.replace('/api', '');
-
-// ✅ Props
-const props = defineProps({
-  expenses: {
-    type: Array,
-    default: () => []
-  },
-  pagination: {
-    type: Object,
-    default: () => ({
-      current_page: 1,
-      last_page: 1,
-      per_page: 10
-    })
-  },
-  handleExpense: {
-    type: Function,
-    default: () => {}
-  }
-});
-
-// ✅ Emits for pagination
-const emit = defineEmits(['page-change']);
-
-// Placeholder methods (you can connect them later)
-const openEditModal = (expense) => {
-  console.log('Edit clicked:', expense);
-};
-
-const deleteExpense = async(id) => {
-  try {
-    await api.delete(`expenses/${id}`)
-    toast.success('Expense deleted successfully')
-    props.handleExpense()
-  } catch (error) {
-    console.log(error);
-    toast.error('Error deleting expense')
-  }
-};
-</script> -->
-
 <script setup>
 import api from '../../../Api/AxiosBase'
 import { useToast } from 'vue-toastification'
@@ -102,8 +55,8 @@ const deleteExpense = async (id) => {
           <tr>
             <th class="px-4 py-3 text-left font-semibold">Date</th>
             <th class="px-4 py-3 text-left font-semibold">Category</th>
-            <!-- <th class="px-4 py-3 text-left font-semibold">Description</th> -->
-            <th class="px-4 py-3 text-left font-semibold">User</th>
+            <th class="px-4 py-3 text-left font-semibold">Description</th>
+            <!-- <th class="px-4 py-3 text-left font-semibold">User</th> -->
             <th class="px-4 py-3 text-left font-semibold">Payment Mode</th>
             <th class="px-4 py-3 text-right font-semibold">Amount</th>
             <th class="px-4 py-3 text-center font-semibold">Actions</th>
@@ -127,15 +80,15 @@ const deleteExpense = async (id) => {
               </div>
             </td>
 
-            <!-- <td class="px-4 py-3 text-slate-600">
+            <td class="px-4 py-3 text-slate-600">
               {{ expense.description || '-' }}
-            </td> -->
+            </td>
 
-            <td class="px-4 py-3">
+            <!-- <td class="px-4 py-3">
               <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
                 {{ expense.user.name }}
               </span>
-            </td>
+            </td> -->
 
             <td class="px-4 py-3">
               <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
