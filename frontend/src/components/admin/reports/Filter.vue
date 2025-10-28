@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 ">
+  <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
     <div class="mx-auto">
       <!-- Filter Form -->
       <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
@@ -25,9 +25,9 @@
               class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all"
             >
               <option value="">All Payment Modes</option>
-              <option value="cash">Cash</option>
-              <option value="card">Card</option>
-              <option value="online">Online</option>
+              <option v-for="mode in payment_mode" :key="mode.id" :value="mode.name">
+                {{ mode.name }}
+              </option>
             </select>
           </div>
 
@@ -75,14 +75,43 @@
           </div>
         </div>
 
-        <!-- Clear Filters -->
-        <button 
-          @click="clearFilters" 
-          type="button"
-          class="text-sm text-gray-600 hover:text-gray-800 underline"
-        >
-          Clear All Filters
-        </button>
+        <!-- Clear Filters and Export Buttons -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <button 
+            @click="clearFilters" 
+            type="button"
+            class="text-sm text-gray-600 hover:text-gray-800 underline"
+          >
+            Clear All Filters
+          </button>
+
+          <!-- Export Buttons -->
+          <div class="flex gap-3">
+            <button 
+              @click="exportToExcel" 
+              type="button"
+              :disabled="data.length === 0"
+              class="flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-semibold shadow-md transform transition-all hover:scale-105"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Export to Excel
+            </button>
+
+            <button 
+              @click="exportToPDF" 
+              type="button"
+              :disabled="data.length === 0"
+              class="flex items-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-semibold shadow-md transform transition-all hover:scale-105"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              Export to PDF
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Summary Cards -->
@@ -189,9 +218,11 @@
                   <span 
                     v-if="item.payment_mode"
                     :class="{
-                      'bg-green-100 text-green-800': item.payment_mode === 'cash',
-                      'bg-purple-100 text-purple-800': item.payment_mode === 'card',
-                      'bg-blue-100 text-blue-800': item.payment_mode === 'online'
+                      'bg-green-100 text-green-800': item.payment_mode === 'Cash',
+                      'bg-purple-100 text-purple-800': item.payment_mode === 'Bank Transfer',
+                      'bg-blue-100 text-blue-800': item.payment_mode === 'Debit Card',
+                      'bg-yellow-100 text-yellow-800': item.payment_mode === 'Mobile Wallet',
+                      'bg-red-100 text-red-800': item.payment_mode === 'Credit Card',
                     }"
                     class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize"
                   >
@@ -214,6 +245,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '../../../Api/AxiosBase';
+import * as XLSX from 'xlsx';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const filters = ref({
   category_id: '',
@@ -229,6 +263,14 @@ const topCategories = ref([]);
 const categories = ref([]);
 const donationTypes = ref([]);
 const loading = ref(false);
+
+const payment_mode = ref([
+  { id: 1, name: 'Cash' },
+  { id: 2, name: 'Bank Transfer' },
+  { id: 3, name: 'Credit Card' },
+  { id: 4, name: 'Debit Card' },
+  { id: 5, name: 'Mobile Wallet' }
+]);
 
 // Format currency
 const formatCurrency = (amount) => {
@@ -260,6 +302,112 @@ const clearFilters = () => {
     end_date: ''
   };
   fetchReports();
+};
+
+// Export to Excel
+const exportToExcel = () => {
+  if (data.value.length === 0) return;
+
+  // Prepare data for export
+  const exportData = data.value.map(item => ({
+    'ID': item.id,
+    'Category/Type': item.category?.name || item.donation_type?.name || 'Unknown',
+    'Amount (PKR)': item.amount,
+    'Payment Mode': item.payment_mode || '-',
+    'Date': formatDate(item.expense_date || item.donation_date)
+  }));
+
+  // Add summary row
+  exportData.push({});
+  exportData.push({
+    'ID': 'TOTAL',
+    'Category/Type': '',
+    'Amount (PKR)': total.value,
+    'Payment Mode': '',
+    'Date': ''
+  });
+
+  // Create workbook and worksheet
+  const ws = XLSX.utils.json_to_sheet(exportData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Reports');
+
+  // Set column widths
+  ws['!cols'] = [
+    { wch: 10 },
+    { wch: 25 },
+    { wch: 15 },
+    { wch: 20 },
+    { wch: 15 }
+  ];
+
+  // Generate filename with date
+  const filename = `reports_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+  // Save file
+  XLSX.writeFile(wb, filename);
+};
+
+// Export to PDF
+const exportToPDF = () => {
+  if (data.value.length === 0) return;
+
+  const doc = new jsPDF();
+
+  // Add title
+  doc.setFontSize(18);
+  doc.text('Financial Reports', 14, 20);
+
+  // Add date range if filters are applied
+  let yPos = 30;
+  if (filters.value.start_date || filters.value.end_date) {
+    doc.setFontSize(10);
+    const dateRange = `Date Range: ${filters.value.start_date || 'Start'} to ${filters.value.end_date || 'End'}`;
+    doc.text(dateRange, 14, yPos);
+    yPos += 10;
+  }
+
+  // Prepare table data
+  const tableData = data.value.map(item => [
+    item.id,
+    item.category?.name || item.donation_type?.name || 'Unknown',
+    formatCurrency(item.amount),
+    item.payment_mode || '-',
+    formatDate(item.expense_date || item.donation_date)
+  ]);
+
+  // Add table using autoTable
+  autoTable(doc, {
+    head: [['ID', 'Category/Type', 'Amount', 'Payment Mode', 'Date']],
+    body: tableData,
+    startY: yPos,
+    theme: 'grid',
+    styles: {
+      fontSize: 9,
+      cellPadding: 3
+    },
+    headStyles: {
+      fillColor: [59, 130, 246],
+      textColor: 255,
+      fontStyle: 'bold'
+    },
+    columnStyles: {
+      2: { halign: 'right' }
+    }
+  });
+
+  // Add summary
+  const finalY = doc.lastAutoTable.finalY + 10;
+  doc.setFontSize(12);
+  doc.setFont(undefined, 'bold');
+  doc.text(`Total Amount: ${formatCurrency(total.value)}`, 14, finalY);
+  doc.text(`Total Records: ${data.value.length}`, 14, finalY + 8);
+
+  // Generate filename with date
+  const filename = `reports_${new Date().toISOString().split('T')[0]}.pdf`;
+
+  // Save file
+  doc.save(filename);
 };
 
 // Fetch categories and donation types on mount
