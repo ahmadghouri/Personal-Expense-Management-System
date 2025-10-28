@@ -204,7 +204,7 @@ const handleSubmitDonation = async () => {
                         Cancel
                     </button>
                     <button @click="handleSubmitDonation" type="button"
-                        class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition">
+                        class="w-full sm:w-auto px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white rounded-lg font-medium transition">
                         {{ editMode ? 'Update Donation' : 'Add Donation' }}
                     </button>
                 </div>

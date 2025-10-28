@@ -1,108 +1,3 @@
-<!-- <script setup>
-import { ref, watch, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import api from '../../../Api/AxiosBase'
-import { useToast } from 'vue-toastification'
-
-const toast = useToast()
-const router = useRouter()
-
-const props = defineProps({
-  showModal: { type: Boolean, default: false },
-  editMode: { type: Boolean, default: false },
-  categorys: { type: Array, default: () => [] },
-  handleExpense: { type: Function, default: () => {} },
-  expenseToEdit: { type: Object, default: null } // 👈 for edit data
-})
-
-const emit = defineEmits(['close'])
-const closeModal = () => emit('close')
-
-// ✅ Reactive form data
-const expenseForm = ref({
-  category_id: '',
-  subcategory: '',
-  expense_date: '',
-  amount: '',
-  payment_mode: '',
-  description: '',
-  attachment: null
-})
-
-// ✅ Prefill form when editing
-onMounted(() => {
-  if (props.editMode && props.expenseToEdit) {
-    expenseForm.value = {
-      category_id: props.expenseToEdit.category_id ?? '',
-      subcategory: props.expenseToEdit.subcategory ?? '',
-      expense_date: props.expenseToEdit.expense_date ?? '',
-      amount: props.expenseToEdit.amount ?? '',
-      payment_mode: props.expenseToEdit.payment_mode ?? '',
-      description: props.expenseToEdit.description ?? '',
-      attachment: null
-    }
-  }
-})
-
-// ✅ File upload handler
-const handleFileUpload = (e) => {
-  const file = e.target.files[0]
-  if (file && file instanceof File) {
-    expenseForm.value.attachment = file
-  } else {
-    expenseForm.value.attachment = null
-  }
-}
-
-// ✅ Create or Update Expense (API Call)
-const handleSubmitExpense = async () => {
-  try {
-    const formData = new FormData()
-
-    // Append all fields except attachment
-    for (const key in expenseForm.value) {
-      if (key !== 'attachment') {
-        formData.append(key, expenseForm.value[key] ?? '')
-      }
-    }
-
-    // Append attachment only if valid file is selected
-    if (expenseForm.value.attachment instanceof File) {
-      formData.append('attachment', expenseForm.value.attachment)
-    }
-
-    let res
-    if (props.editMode && props.expenseToEdit?.id) {
-      // ✅ Update existing expense
-      res = await api.post(`/expenses/${props.expenseToEdit.id}?_method=PUT`, formData)
-      toast.success('Expense updated successfully')
-    } else {
-      // ✅ Create new expense
-      res = await api.post('/expenses', formData)
-      toast.success('Expense created successfully')
-    }
-
-    closeModal()
-    props.handleExpense()
-  } catch (error) {
-    if (error.response?.status === 422) {
-      console.error('Validation errors:', error.response.data.errors)
-    } else {
-      console.error('Error saving expense:', error)
-      toast.error('Error saving expense')
-    }
-  }
-}
-
-// ✅ Watch Category - redirect if "Donation"
-watch(() => expenseForm.value.category_id, (val) => {
-  const selected = props.categorys.find(c => c.id === Number(val))
-  if (selected?.name === 'Donation') {
-    router.push('/admin/donation')
-    closeModal()
-  }
-})
-</script> -->
 
 <script setup>
 import { ref, watch } from 'vue'
@@ -348,7 +243,7 @@ watch(() => expenseForm.value.category_id, (val) => {
           <button
             @click="handleSubmitExpense"
             type="button"
-            class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition"
+            class="w-full sm:w-auto px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white rounded-lg font-medium transition"
           >
             {{ editMode ? 'Update Expense' : 'Add Expense' }}
           </button>
