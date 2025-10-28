@@ -327,7 +327,10 @@ class ReportingController extends Controller
         }
 
         if ($request->filled('donation_type')) {
-           $query = Donation::query(); // Donation model use karna
+           $query = Donation::query();
+              if ($user->role === 'manager') {
+            $query->where('user_id', $user->id);
+        }
            $query->where('donation_type_id', (int) $request->donation_type);
 
         }
