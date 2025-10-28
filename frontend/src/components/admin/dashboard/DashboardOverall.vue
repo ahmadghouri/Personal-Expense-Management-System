@@ -18,7 +18,7 @@
                 </div>
                 <p class="text-sm text-gray-600 mb-1 font-medium">Total Expenses</p>
                 <p class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                   Rs {{ reportsOverall.total_expense }}</p>
+                   {{ formatCurrency(reportsOverall.total_expense) }}</p>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
                 <p class="text-sm text-gray-600 mb-1 font-medium">Total Donations</p>
                 <p
                     class="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-800 bg-clip-text text-transparent">
-                   Rs {{ reportsOverall.total_donation }}</p>
+                   {{ formatCurrency(reportsOverall.total_donation) }}</p>
             </div>
         </div>
 
@@ -62,7 +62,7 @@
                 <p class="text-sm text-gray-600 mb-1 font-medium">Overall Total</p>
                 <p
                     class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
-                   Rs {{ reportsOverall.overall_total }}</p>
+                   {{ formatCurrency(reportsOverall.overall_total) }}</p>
             </div>
         </div>
     </div>
@@ -90,6 +90,15 @@ const getReportOverall = async () => {
         console.error('Error fetching report overall:', error);
     }
 }
+const formatCurrency = (amount) => {
+    const numAmount = parseFloat(amount);
+    return new Intl.NumberFormat('en-PK', {
+        style: 'currency',
+        currency: 'PKR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(numAmount);
+};
 
 onMounted(() => {
     getReportOverall();
