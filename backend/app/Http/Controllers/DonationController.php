@@ -31,7 +31,7 @@ class DonationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            // 'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
             'donation_type_id' => 'required|exists:donation_types,id',
             'donation_date' => 'required|date',
             'amount' => 'nullable|numeric|min:0',
@@ -64,7 +64,6 @@ class DonationController extends Controller
         return response()->json([
             'message' => 'Donation added successfully',
             'donation' => $donation->load(['category', 'donationType']),
-
         ]);
     }
 

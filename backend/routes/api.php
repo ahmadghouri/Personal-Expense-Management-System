@@ -64,7 +64,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reports/monthly', [ReportingController::class, 'monthlyTrends']);
     Route::get('/reports/pie', [ReportingController::class, 'expensePieChart']);
     Route::get('/reports/filter', [ReportingController::class, 'filter']);
-    Route::get('/reports/export-pdf', [ReportingController::class, 'exportPdf']);
-    Route::get('/reports/export-excel', [ReportingController::class, 'exportExcel']);
-
 });

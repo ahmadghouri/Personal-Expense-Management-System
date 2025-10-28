@@ -326,14 +326,16 @@ class ReportingController extends Controller
             $query->where('payment_mode', $request->payment_mode);
         }
 
-        if ($request->filled('donation_type')) {
-           $query = Donation::query();
-              if ($user->role === 'manager') {
-            $query->where('user_id', $user->id);
-        }
-           $query->where('donation_type_id', (int) $request->donation_type);
+       if ($request->filled('donation_type')) {
+    $query = Donation::with('donationType'); // ✅ include related model
 
-        }
+    if ($user->role === 'manager') {
+        $query->where('user_id', $user->id);
+    }
+
+    $query->where('donation_type_id', (int) $request->donation_type);
+}
+
 
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('expense_date', [$request->start_date, $request->end_date]);
@@ -362,81 +364,6 @@ class ReportingController extends Controller
 
     }
 
-    public function exportExcel(Request $request)
-    {
-
-        // Optional: validate filters
-        $request->validate([
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'category_id' => 'nullable|integer|exists:categories,id',
-        ]);
-
-        // Optional: dynamic filename
-        $filename = 'expense_report_'.now()->format('Y_m_d').'.xlsx';
-
-        return Excel::download(new ExpenseExport($request), $filename);
-
-
-    }
-
-    public function exportPdf(Request $request)
-    {
-        // Replace query parameters
-        $request->replace($request->query());
-        Log::info('Export request received', $request->query());
-
-        $user = Auth::user();
-
-        // Expenses query
-        $expenseQuery = Expense::with('category');
-
-        if ($request->filled(['start_date', 'end_date'])) {
-            $expenseQuery->whereBetween('expense_date', [$request->start_date, $request->end_date]);
-        }
-
-        if ($request->filled('category_id')) {
-            $expenseQuery->where('category_id', $request->category_id);
-        }
-
-        if ($user->role === 'manager') {
-            $expenseQuery->where('user_id', $user->id);
-        }
-
-        $expenses = $expenseQuery->get();
-
-        // Donations query
-        $donationQuery = Donation::with('donationType');
-
-        if ($request->filled(['start_date', 'end_date'])) {
-            $donationQuery->whereBetween('donation_date', [$request->start_date, $request->end_date]);
-        }
-
-        if ($request->filled('donation_type_id')) {
-            $donationQuery->where('donation_type_id', $request->donation_type_id);
-        }
-
-        if ($user->role === 'manager') {
-            $donationQuery->where('user_id', $user->id);
-        }
-
-        $donations = $donationQuery->get();
-
-        // Handle empty results
-        if ($expenses->isEmpty()) {
-            $expenses = collect([['message' => 'No expense data found']]);
-        }
-
-        if ($donations->isEmpty()) {
-            $donations = collect([['message' => 'No donation data found']]);
-        }
-
-        // Generate PDF
-        $pdf = Pdf::loadView('exports.expenses', compact('expenses', 'donations'))
-            ->setPaper('a4', 'portrait');
-
-        return $pdf->download('expense_report.pdf');
-    }
 }
 
 

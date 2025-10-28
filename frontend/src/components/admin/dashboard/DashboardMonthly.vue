@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-100">
-    <h2 class="text-3xl font-semibold mb-6 text-gray-800 tracking-tight">📊 Expense Type Breakdown</h2>
+    <h2 class="text-3xl font-semibold mb-6 text-gray-800 tracking-tight">Expense Type Breakdown</h2>
 
     <!-- Filters -->
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
