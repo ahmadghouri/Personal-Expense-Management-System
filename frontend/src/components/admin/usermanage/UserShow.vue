@@ -52,7 +52,7 @@ const handleDelete = async ($id) => {
 
 <template>
   <div>
-    <div class="max-w-5xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+    <div class=" mx-auto mt-10 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
       <div class="overflow-x-auto rounded-xl">
         <ClipLoader v-if="props.isLoadind" color="#f59e0b" size="50px" class="my-6" />
 

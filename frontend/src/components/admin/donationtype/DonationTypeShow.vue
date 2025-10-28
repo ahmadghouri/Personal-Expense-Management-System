@@ -60,7 +60,7 @@ function formatAmount(amount) {
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow-md border border-slate-200">
+  <div class=" mx-auto mt-10 bg-white p-6 rounded-2xl shadow-md border border-slate-200">
     <div class="overflow-x-auto rounded-xl">
       <ClipLoader v-if="props.isLoadind" color="#f59e0b" size="50px" class="m-6" />
 
