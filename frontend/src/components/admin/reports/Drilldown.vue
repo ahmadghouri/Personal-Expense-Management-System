@@ -5,13 +5,7 @@
             <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <button @click="goBack"
-                            class="bg-gray-200 hover:bg-gray-300 p-3 rounded-xl transition-all transform hover:scale-105">
-                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                            </svg>
-                        </button>
+
                         <div>
                             <h1
                                 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
@@ -59,10 +53,10 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-blue-100 text-sm font-medium mb-1">Total Amount</p>
-                            <h3 class="text-4xl font-bold">{{ formatCurrency(totalAmount) }}</h3>
+                            <h3 class="text-3xl font-bold">{{ formatCurrency(totalAmount) }}</h3>
                         </div>
-                        <div class="bg-white bg-opacity-20 rounded-full p-4">
-                            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="bg-white bg-opacity-20 rounded-full p-3">
+                            <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
@@ -75,10 +69,10 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-purple-100 text-sm font-medium mb-1">Total Entries</p>
-                            <h3 class="text-4xl font-bold">{{ expenses.length }}</h3>
+                            <h3 class="text-3xl font-bold">{{ expenses.length }}</h3>
                         </div>
-                        <div class="bg-white bg-opacity-20 rounded-full p-4">
-                            <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="bg-white bg-opacity-20 rounded-full p-3">
+                            <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
@@ -91,10 +85,10 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-green-100 text-sm font-medium mb-1">Average Amount</p>
-                            <h3 class="text-4xl font-bold">{{ formatCurrency(averageAmount) }}</h3>
+                            <h3 class="text-3xl font-bold">{{ formatCurrency(averageAmount) }}</h3>
                         </div>
-                        <div class="bg-white bg-opacity-20 rounded-full p-4">
-                            <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="bg-white bg-opacity-20 rounded-full p-3">
+                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
@@ -131,7 +125,7 @@
                                 <td class="px-6 py-4 text-sm text-gray-800">
                                     <div class="font-semibold">{{ expense.category?.name }}</div>
                                     <div v-if="expense.subcategory" class="text-xs text-gray-500">{{ expense.subcategory
-                                        }}</div>
+                                    }}</div>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-bold text-green-600">
                                     {{ formatCurrency(expense.amount) }}
