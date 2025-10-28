@@ -1,6 +1,7 @@
 <script setup>
-import useAuth from "../components/useAuth";
-const { logout } = useAuth();
+import {useAuthStore} from "../stores/auth";
+const auth = useAuthStore();
+
 
 const navLink = [
   { to: '/manager/dashboard', name: "Dashboard" },
@@ -37,7 +38,7 @@ const navLink = [
 
         <li
           class="flex items-center gap-3 px-4 py-2 rounded-md bg-gray-800 hover:bg-amber-600 hover:text-white transition-colors duration-200 cursor-pointer"
-          @click="logout"
+          @click="auth.logout()"
         >
           <span class="flex-1 text-white font-medium">Logout</span>
         </li>

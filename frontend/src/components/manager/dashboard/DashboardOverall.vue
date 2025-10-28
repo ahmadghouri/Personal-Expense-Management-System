@@ -83,7 +83,6 @@ const reportsOverall = ref({
 const getReportOverall = async () => {
     try {
         const res = await api.get('reports/summary')
-        console.log(res.data);
         reportsOverall.value = res.data;
 
     } catch (error) {

@@ -52,8 +52,6 @@ const categorys = ref([])
 const handleDonations = async (page = 1) => {
   try {
     const response = await api.get(`donations?page=${page}&per_page=${pagination.value.per_page}`)
-    console.log(response.data)
-
     donations.value = response.data.donations?.data || []
 
     pagination.value = {

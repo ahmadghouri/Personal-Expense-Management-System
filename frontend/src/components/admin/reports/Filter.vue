@@ -8,10 +8,8 @@
           <!-- Category Filter -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
-            <select 
-              v-model="filters.category_id" 
-              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all"
-            >
+            <select v-model="filters.category_id"
+              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all">
               <option value="">All Categories</option>
               <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
             </select>
@@ -20,10 +18,8 @@
           <!-- Payment Mode Filter -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Payment Mode</label>
-            <select 
-              v-model="filters.payment_mode" 
-              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all"
-            >
+            <select v-model="filters.payment_mode"
+              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all">
               <option value="">All Payment Modes</option>
               <option v-for="mode in payment_mode" :key="mode.id" :value="mode.name">
                 {{ mode.name }}
@@ -34,10 +30,8 @@
           <!-- Donation Type Filter -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Donation Type</label>
-            <select 
-              v-model="filters.donation_type" 
-              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all"
-            >
+            <select v-model="filters.donation_type"
+              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all">
               <option value="">All Donation Types</option>
               <option v-for="d in donationTypes" :key="d.id" :value="d.id">{{ d.name }}</option>
             </select>
@@ -46,30 +40,21 @@
           <!-- Start Date -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Start Date</label>
-            <input 
-              type="date" 
-              v-model="filters.start_date" 
-              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all"
-            />
+            <input type="date" v-model="filters.start_date"
+              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all" />
           </div>
 
           <!-- End Date -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">End Date</label>
-            <input 
-              type="date" 
-              v-model="filters.end_date" 
-              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all"
-            />
+            <input type="date" v-model="filters.end_date"
+              class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all" />
           </div>
 
           <!-- Filter Button -->
           <div class="flex items-end">
-            <button 
-              @click="fetchReports" 
-              type="button"
-              class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transform transition-all hover:scale-105"
-            >
+            <button @click="fetchReports" type="button"
+              class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transform transition-all hover:scale-105">
               Apply Filters
             </button>
           </div>
@@ -77,36 +62,26 @@
 
         <!-- Clear Filters and Export Buttons -->
         <div class="flex flex-wrap items-center justify-between gap-4">
-          <button 
-            @click="clearFilters" 
-            type="button"
-            class="text-sm text-gray-600 hover:text-gray-800 underline"
-          >
+          <button @click="clearFilters" type="button" class="text-sm text-gray-600 hover:text-gray-800 underline">
             Clear All Filters
           </button>
 
           <!-- Export Buttons -->
           <div class="flex gap-3">
-            <button 
-              @click="exportToExcel" 
-              type="button"
-              :disabled="data.length === 0"
-              class="flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-semibold shadow-md transform transition-all hover:scale-105"
-            >
+            <button @click="exportToExcel" type="button" :disabled="data.length === 0"
+              class="flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-semibold shadow-md transform transition-all hover:scale-105">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               Export to Excel
             </button>
 
-            <button 
-              @click="exportToPDF" 
-              type="button"
-              :disabled="data.length === 0"
-              class="flex items-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-semibold shadow-md transform transition-all hover:scale-105"
-            >
+            <button @click="exportToPDF" type="button" :disabled="data.length === 0"
+              class="flex items-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-semibold shadow-md transform transition-all hover:scale-105">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
               Export to PDF
             </button>
@@ -125,7 +100,8 @@
             </div>
             <div class="bg-white bg-opacity-20 rounded-full p-4">
               <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
           </div>
@@ -140,7 +116,8 @@
             </div>
             <div class="bg-white bg-opacity-20 rounded-full p-4">
               <svg class="w-8 h-8 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
           </div>
@@ -151,11 +128,8 @@
       <div v-if="topCategories.length > 0" class="bg-white rounded-2xl shadow-xl p-6 mb-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Top Categories</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div 
-            v-for="(c, index) in topCategories" 
-            :key="index"
-            class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4"
-          >
+          <div v-for="(c, index) in topCategories" :key="index"
+            class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4">
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-sm text-gray-600 mb-1">{{ c.category || 'Unknown' }}</p>
@@ -176,13 +150,15 @@
         </div>
 
         <div v-if="loading" class="p-12 text-center">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent">
+          </div>
           <p class="mt-4 text-gray-600">Loading data...</p>
         </div>
 
         <div v-else-if="data.length === 0" class="p-12 text-center">
           <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           <p class="text-xl text-gray-600">No records found</p>
           <p class="text-sm text-gray-500 mt-2">Try adjusting your filters</p>
@@ -200,32 +176,28 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-              <tr 
-                v-for="item in data" 
-                :key="item.id"
-                class="hover:bg-gray-50 transition-colors"
-              >
+              <tr v-for="item in data" :key="item.id" class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.id }}</td>
                 <td class="px-6 py-4">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                    {{ item.category?.name || item.donation_type?.name || 'Unknown' }}
+                  <span
+                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    <span v-if="item.donation_type" class=" text-md px-2 rounded-full font-medium">
+                      Donation -
+                    </span>
+                    {{ item.donation_type?.name || item.category?.name || 'Unknown' }}
                   </span>
                 </td>
                 <td class="px-6 py-4 text-sm font-semibold text-gray-900">
                   {{ formatCurrency(item.amount) }}
                 </td>
                 <td class="px-6 py-4 text-sm text-gray-600">
-                  <span 
-                    v-if="item.payment_mode"
-                    :class="{
-                      'bg-green-100 text-green-800': item.payment_mode === 'Cash',
-                      'bg-purple-100 text-purple-800': item.payment_mode === 'Bank Transfer',
-                      'bg-blue-100 text-blue-800': item.payment_mode === 'Debit Card',
-                      'bg-yellow-100 text-yellow-800': item.payment_mode === 'Mobile Wallet',
-                      'bg-red-100 text-red-800': item.payment_mode === 'Credit Card',
-                    }"
-                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize"
-                  >
+                  <span v-if="item.payment_mode" :class="{
+                    'bg-green-100 text-green-800': item.payment_mode === 'Cash',
+                    'bg-purple-100 text-purple-800': item.payment_mode === 'Bank Transfer',
+                    'bg-blue-100 text-blue-800': item.payment_mode === 'Debit Card',
+                    'bg-yellow-100 text-yellow-800': item.payment_mode === 'Mobile Wallet',
+                    'bg-red-100 text-red-800': item.payment_mode === 'Credit Card',
+                  }" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize">
                     {{ item.payment_mode }}
                   </span>
                   <span v-else class="text-gray-400">-</span>
@@ -311,7 +283,7 @@ const exportToExcel = () => {
   // Prepare data for export
   const exportData = data.value.map(item => ({
     'ID': item.id,
-    'Category/Type': item.category?.name || item.donation_type?.name || 'Unknown',
+    'Category/Type': item.donation_type ? `Donation - ${item.donation_type?.name || 'Unknown'}` : item.category?.name || 'Unknown',
     'Amount (PKR)': item.amount,
     'Payment Mode': item.payment_mode || '-',
     'Date': formatDate(item.expense_date || item.donation_date)
@@ -370,7 +342,7 @@ const exportToPDF = () => {
   // Prepare table data
   const tableData = data.value.map(item => [
     item.id,
-    item.category?.name || item.donation_type?.name || 'Unknown',
+    item.donation_type ? `Donation - ${item.donation_type?.name || 'Unknown'}` : item.category?.name || 'Unknown',
     formatCurrency(item.amount),
     item.payment_mode || '-',
     formatDate(item.expense_date || item.donation_date)
@@ -438,6 +410,10 @@ const fetchReports = async () => {
     const res = await api.get(`/reports/filter?${query}`);
     data.value = res.data.data || [];
     total.value = res.data.total || 0;
+
+    console.log(res.data.data);
+    console.log(res.data.total);
+
     topCategories.value = res.data.top_categories || [];
   } catch (error) {
     console.error('Error fetching reports:', error);

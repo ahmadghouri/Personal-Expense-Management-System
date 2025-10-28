@@ -7,22 +7,14 @@
     </div>
 
 
-    <!-- Summary Cards with Glassmorphism -->
-    <DashboardOverall/>
+    <DashboardOverall />
 
-    <!-- Filters Section with Modern Design -->
 
-    <!-- Charts Grid -->
     <DashboardBreakdown />
 
 
-    <!-- Monthly Trends Table -->
-    <DashboardMonthly/>
+    <DashboardMonthly />
 
-    <!-- Expense Distribution Cards -->
-
-
-    <!-- Export Buttons with Animations -->
 
   </div>
 </template>
