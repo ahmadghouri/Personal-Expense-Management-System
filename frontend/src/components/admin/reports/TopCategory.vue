@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-100 py-4 sm:py-6">
+  <div class="screen bg-gray-100 py-4 sm:py-6">
     <div class=" mx-auto space-y-8">
 
       <div
         class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between transition-all duration-300 hover:shadow-xl">
         <div class="mb-4 sm:mb-0">
-          <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">💰 Expense Dashboard</h1>
+          <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Expense Dashboard</h1>
           <p class="text-md text-gray-500 mt-1">
             <span class="font-semibold text-blue-600">Top 5 Categories</span> Overview (Current Period)
           </p>
