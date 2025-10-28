@@ -1,18 +1,17 @@
 <script setup>
-import { RouterView } from 'vue-router';
-import { onMounted } from 'vue';
-import useAuth from './components/useAuth';
-const { fetchUser } = useAuth();
-onMounted(() => {
-  fetchUser();
-});
+import { RouterView } from 'vue-router'
+import { onMounted } from 'vue'
+// import { useAuthStore } from '../src/stores/auth'
 
+// const authStore = useAuthStore()
+
+// onMounted(() => {
+//   authStore.fetchUser()
+// })
 </script>
 
 <template>
-<RouterView/>
+  <RouterView />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
