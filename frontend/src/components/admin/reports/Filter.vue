@@ -149,11 +149,7 @@
           <h2 class="text-xl font-bold text-gray-800">Data Records</h2>
         </div>
 
-        <div v-if="loading" class="p-12 text-center">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent">
-          </div>
-          <p class="mt-4 text-gray-600">Loading data...</p>
-        </div>
+       <ClipLoader v-if="loading" color="#f59e0b" size="50px" class="m-6 text-center items-center" />
 
         <div v-else-if="data.length === 0" class="p-12 text-center">
           <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -410,9 +406,6 @@ const fetchReports = async () => {
     const res = await api.get(`/reports/filter?${query}`);
     data.value = res.data.data || [];
     total.value = res.data.total || 0;
-
-    console.log(res.data.data);
-    console.log(res.data.total);
 
     topCategories.value = res.data.top_categories || [];
   } catch (error) {

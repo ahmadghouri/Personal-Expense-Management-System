@@ -7,7 +7,7 @@ import DonationCreate from '../../components/manager/donation/DonationCreate.vue
 const showModal = ref(false)
 const editMode = ref(false)
 const selectedDonation = ref(null)
-
+const isLoading = ref(false)
 const donationTypes = ref([])
 const showFilters = ref(false)
 const donations = ref([])
@@ -51,6 +51,7 @@ const categorys = ref([])
 // ✅ Fetch donations
 const handleDonations = async (page = 1) => {
   try {
+    isLoading.value = true
     const response = await api.get(`donations?page=${page}&per_page=${pagination.value.per_page}`)
     donations.value = response.data.donations?.data || []
 
@@ -59,6 +60,7 @@ const handleDonations = async (page = 1) => {
       last_page: response.data.donations?.last_page || 1,
       per_page: response.data.donations?.per_page || 10
     }
+    isLoading.value = false
   } catch (error) {
     console.error('Error fetching donations:', error)
   }
@@ -226,7 +228,7 @@ onMounted(() => {
   </div>
 
   <!-- ✅ Donation List -->
-  <DonationShow :donations="filteredDonations" :handleDonations="handleDonations" :pagination="pagination"
+  <DonationShow :donations="filteredDonations" :handleDonations="handleDonations" :isLoading="isLoading" :pagination="pagination"
     @page-change="handleDonations" @edit-donation="handleEditDonation" />
 
   <!-- ✅ Create / Edit Modal -->

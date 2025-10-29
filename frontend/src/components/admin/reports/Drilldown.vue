@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-6">
+    <div class=" bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 pt-6">
         <div class=" mx-auto">
             <!-- Header with Back Button -->
             <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
@@ -29,12 +29,7 @@
             </div>
 
             <!-- Loading State -->
-            <div v-if="loading" class="bg-white rounded-2xl shadow-xl p-12 text-center">
-                <div
-                    class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent">
-                </div>
-                <p class="mt-4 text-gray-600 text-lg">Loading expense details...</p>
-            </div>
+          <ClipLoader v-if="loading" color="#f59e0b" size="50px" class="m-6 text-center items-center" />
 
             <!-- No Data State -->
             <div v-else-if="!loading && expenses.length === 0" class="bg-white rounded-2xl shadow-xl p-12 text-center">

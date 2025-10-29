@@ -45,7 +45,12 @@
 
     <!-- Chart -->
     <div class="bg-gray-50 rounded-xl p-4 shadow-inner">
-      <canvas ref="chartRef" class="w-full max-w-lg mx-auto"></canvas>
+      <div v-if="filteredData.length > 0">
+        <canvas ref="chartRef" class="w-full max-w-lg mx-auto"></canvas>
+      </div>
+      <div v-else>
+        <p class="text-center text-gray-500">No expense data available</p>
+      </div>
     </div>
   </div>
 </template>

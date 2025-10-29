@@ -1,4 +1,5 @@
 <template>
+
   <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
     <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
       <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,7 +19,12 @@
           </svg>
           Expense Breakdown
         </h4>
-        <Pie :data="expensePieData" :options="chartOptions" />
+        <div v-if="expensePieData.labels.length > 0">
+          <Pie :data="expensePieData" :options="chartOptions" />
+        </div>
+        <div v-else>
+          <p class="text-center text-gray-500">No expense data available</p>
+        </div>
       </div>
 
       <!-- Donation Pie Chart -->
@@ -30,7 +36,12 @@
           </svg>
           Donation Breakdown
         </h4>
-        <Pie :data="donationPieData" :options="chartOptions" />
+        <div v-if="donationPieData.labels.length > 0">
+          <Pie :data="donationPieData" :options="chartOptions" />
+        </div>
+        <div v-else>
+          <p class="text-center text-gray-500">No donation data available</p>
+        </div>
       </div>
     </div>
   </div>

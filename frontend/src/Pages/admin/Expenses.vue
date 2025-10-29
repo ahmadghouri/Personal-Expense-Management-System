@@ -1,118 +1,3 @@
-<!-- <script setup>
-import { onMounted, ref, computed } from 'vue';
-import api from '../../Api/AxiosBase';
-import ExpenseShow from '../../components/admin/expense/ExpenseShow.vue';
-import ExpenseCreate from '../../components/admin/expense/ExpenseCreate.vue';
-const showModal = ref(false);
-
-const categorys = ref([]);
-const showFilters = ref(false);
-const expenses = ref([]);
-const search = ref('');
-// const expenses = ref([]);
-const pagination = ref({
-    current_page: 1,
-    last_page: 1,
-    per_page: 10,
-});
-const filters = ref({
-    category: '',
-    dateFrom: '',
-    dateTo: '',
-    minAmount: '',
-    maxAmount: ''
-});
-
-const handleCategory = async () => {
-    try {
-        const response = await api.get('categories');
-        categorys.value = response.data;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-const handleExpense = async (page = 1) => {
-    try {
-        const response = await api.get(`expenses?page=${page}&per_page=${pagination.value.per_page}`);
-        expenses.value = response.data.data;
-        pagination.value = {
-            current_page: response.data.current_page,
-            last_page: response.data.last_page,
-            per_page: response.data.per_page,
-        };
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-
-// ✅ Filtered Expenses
-const filteredExpenses = computed(() => {
-    return expenses.value.filter((exp) => {
-        const searchQuery = search.value.toLowerCase();
-
-        // ✅ Search Match (check title, category name, description, or user name)
-        const matchesSearch =
-            exp.title?.toLowerCase().includes(searchQuery) ||
-            exp.description?.toLowerCase().includes(searchQuery) ||
-            exp.category?.name?.toLowerCase().includes(searchQuery) ||
-            exp.user?.name?.toLowerCase().includes(searchQuery);
-
-        // ✅ Category Filter
-        const matchesCategory =
-            !filters.value.category ||
-            exp.category?.name === filters.value.category;
-
-        // ✅ Amount Filters
-        const matchesMin =
-            !filters.value.minAmount ||
-            exp.amount >= parseFloat(filters.value.minAmount);
-
-        const matchesMax =
-            !filters.value.maxAmount ||
-            exp.amount <= parseFloat(filters.value.maxAmount);
-
-        // ✅ Date Filters
-        const expenseDate = new Date(exp.expense_date || exp.date);
-        const matchesDateFrom =
-            !filters.value.dateFrom ||
-            expenseDate >= new Date(filters.value.dateFrom);
-
-        const matchesDateTo =
-            !filters.value.dateTo ||
-            expenseDate <= new Date(filters.value.dateTo);
-
-        // ✅ Final combined condition
-        return (
-            matchesSearch &&
-            matchesCategory &&
-            matchesMin &&
-            matchesMax &&
-            matchesDateFrom &&
-            matchesDateTo
-        );
-    });
-});
-
-// ✅ Clear Filters
-const clearFilters = () => {
-    filters.value = {
-        category: '',
-        dateFrom: '',
-        dateTo: '',
-        minAmount: '',
-        maxAmount: ''
-    };
-    search.value = '';
-};
-
-onMounted(() => {
-    handleCategory();
-    handleExpense();
-});
-</script> -->
-
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import api from '../../Api/AxiosBase'
@@ -122,7 +7,7 @@ import ExpenseCreate from '../../components/admin/expense/ExpenseCreate.vue'
 const showModal = ref(false)
 const editMode = ref(false)
 const selectedExpense = ref(null)
-
+const isLoadind = ref(false);
 const categorys = ref([])
 const showFilters = ref(false)
 const expenses = ref([])
@@ -155,6 +40,7 @@ const handleCategory = async () => {
 // ✅ Fetch expenses
 const handleExpense = async (page = 1) => {
   try {
+    isLoadind.value = true;
     const response = await api.get(`expenses?page=${page}&per_page=${pagination.value.per_page}`)
     expenses.value = response.data.data
     pagination.value = {
@@ -162,8 +48,10 @@ const handleExpense = async (page = 1) => {
       last_page: response.data.last_page,
       per_page: response.data.per_page
     }
+    isLoadind.value = false;
   } catch (error) {
     console.log(error)
+    isLoadind.value = false;
   }
 }
 
@@ -329,7 +217,7 @@ onMounted(() => {
   </div>
 
   <!-- Expense List -->
-  <ExpenseShow :expenses="filteredExpenses" :handleExpense="handleExpense" :pagination="pagination"
+  <ExpenseShow :expenses="filteredExpenses" :handleExpense="handleExpense" :isLoadind="isLoadind" :pagination="pagination"
     @page-change="handleExpense" @edit-expense="handleEditExpense" />
 
   <ExpenseCreate v-if="showModal" :handleExpense="handleExpense" :showModal="showModal" :editMode="editMode"

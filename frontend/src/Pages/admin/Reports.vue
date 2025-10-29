@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 md:p-8 rounded-md">
+    <div class=" bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2 rounded-md">
       
 
         <Filter />
@@ -18,9 +18,4 @@
 import Drilldown from '../../components/admin/reports/Drilldown.vue';
 import Filter from '../../components/admin/reports/Filter.vue';
 import TopCategory from '../../components/admin/reports/TopCategory.vue';
-
-
-
-
-
 </script>

@@ -18,7 +18,12 @@
           </svg>
           Expense Breakdown
         </h4>
-        <Pie :data="expensePieData" :options="chartOptions" />
+        <div v-if="expensePieData.labels.length > 0">
+          <Pie :data="expensePieData" :options="chartOptions" />
+        </div>
+        <div v-else>
+          <p class="text-center text-gray-500">No expense data available</p>
+        </div>
       </div>
 
       <!-- Donation Pie Chart -->
@@ -30,7 +35,12 @@
           </svg>
           Donation Breakdown
         </h4>
-        <Pie :data="donationPieData" :options="chartOptions" />
+        <div v-if="donationPieData.labels.length > 0">
+          <Pie :data="donationPieData" :options="chartOptions" />
+        </div>
+        <div v-else>
+          <p class="text-center text-gray-500">No donation data available</p>
+        </div>
       </div>
     </div>
   </div>

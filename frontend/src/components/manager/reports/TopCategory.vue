@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-100 py-4 sm:py-6">
+  <div class=" bg-gray-100 py-4 sm:py-6">
     <div class=" mx-auto space-y-8">
 
       <div

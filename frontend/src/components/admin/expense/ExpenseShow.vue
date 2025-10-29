@@ -22,7 +22,11 @@ const props = defineProps({
   handleExpense: {
     type: Function,
     default: () => {}
-  }
+  },
+    isLoadind: {
+        type: Boolean,
+        default: false
+    }
 })
 
 // ✅ Emits for pagination and edit
@@ -50,7 +54,10 @@ const deleteExpense = async (id) => {
 <template>
   <div class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
     <div class="overflow-x-auto">
-      <table class="min-w-full text-sm">
+      <div v-if="props.isLoadind">
+        <ClipLoader color="#f59e0b" size="50px" class="m-6" />
+      </div>
+      <table class="min-w-full text-sm" v-else>
         <thead class="bg-slate-50 text-slate-700 border-b border-slate-200">
           <tr>
             <th class="px-4 py-3 text-left font-semibold">Date</th>
@@ -134,7 +141,7 @@ const deleteExpense = async (id) => {
     </div>
 
     <!-- ✅ Pagination -->
-    <div class="flex flex-wrap justify-between items-center px-6 py-4 border-t border-slate-200 bg-slate-50">
+    <div class="flex flex-wrap justify-between items-center px-6 py-4 border-t border-slate-200 bg-slate-50" v-if="props.pagination?.last_page > 1">
       <div class="text-sm text-slate-600">
         Page {{ props.pagination.current_page }} of {{ props.pagination.last_page }}
       </div>

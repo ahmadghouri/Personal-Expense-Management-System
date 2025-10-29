@@ -18,7 +18,7 @@
                 </div>
                 <p class="text-sm text-gray-600 mb-1 font-medium">Total Expenses</p>
                 <p class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                   {{ formatCurrency(reportsOverall.total_expense) }}</p>
+                   {{ formatCurrency(reportsOverall.total_expense || '00') }}</p>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
                 <p class="text-sm text-gray-600 mb-1 font-medium">Total Donations</p>
                 <p
                     class="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-800 bg-clip-text text-transparent">
-                   {{ formatCurrency(reportsOverall.total_donation) }}</p>
+                   {{ formatCurrency(reportsOverall.total_donation || '00') }}</p>
             </div>
         </div>
 
@@ -62,7 +62,7 @@
                 <p class="text-sm text-gray-600 mb-1 font-medium">Overall Total</p>
                 <p
                     class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
-                   {{ formatCurrency(reportsOverall.overall_total) }}</p>
+                   {{ formatCurrency(reportsOverall.overall_total || '00') }}</p>
             </div>
         </div>
     </div>
