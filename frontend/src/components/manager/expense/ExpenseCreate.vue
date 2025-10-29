@@ -19,11 +19,19 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 const closeModal = () => emit('close')
 
+// ✅ Function for current date
+function getTodayDate() {
+  const today = new Date()
+  const yyyy = today.getFullYear()
+  const mm = String(today.getMonth() + 1).padStart(2, "0")
+  const dd = String(today.getDate()).padStart(2, "0")
+  return `${yyyy}-${mm}-${dd}`
+}
 // ✅ Reactive form data
 const expenseForm = ref({
   category_id: '',
   subcategory: '',
-  expense_date: '',
+  expense_date: getTodayDate(),
   amount: '',
   payment_mode: '',
   description: '',

@@ -19,18 +19,25 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 const closeModal = () => emit('close')
 
-// ✅ Reactive form data
+function getTodayDate() {
+  const today = new Date()
+  const yyyy = today.getFullYear()
+  const mm = String(today.getMonth() + 1).padStart(2, "0")
+  const dd = String(today.getDate()).padStart(2, "0")
+  return `${yyyy}-${mm}-${dd}`
+}
+
 const expenseForm = ref({
   category_id: '',
   subcategory: '',
-  expense_date: '',
+  expense_date: getTodayDate(),
   amount: '',
   payment_mode: '',
   description: '',
   attachment: null
 })
 
-// ✅ Watch for edit data and prefill form
+
 watch(
   () => props.expenseToEdit,
   (newVal) => {
@@ -49,13 +56,13 @@ watch(
   { immediate: true }
 )
 
-// ✅ File upload handler
+
 const handleFileUpload = (e) => {
   const file = e.target.files[0]
   expenseForm.value.attachment = file instanceof File ? file : null
 }
 
-// ✅ Create or Update Expense (API Call)
+
 const handleSubmitExpense = async () => {
   try {
     const formData = new FormData()
@@ -89,7 +96,7 @@ const handleSubmitExpense = async () => {
   }
 }
 
-// ✅ Watch Category - redirect if "Donation"
+
 watch(() => expenseForm.value.category_id, (val) => {
   const selected = props.categorys.find(c => c.id === Number(val))
   if (selected?.name === 'Donation') {

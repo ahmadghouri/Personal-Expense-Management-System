@@ -1,16 +1,18 @@
 <script setup>
 import api from '../../../Api/AxiosBase'
 import { useToast } from 'vue-toastification'
-const toast = useToast()
+import { ref } from 'vue'
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
+const toast = useToast()
+const showPopup = ref(false)
+const popupUrl = ref('')
 const baseUrl = api.defaults.baseURL.replace('/api', '')
 
 // ✅ Props
 const props = defineProps({
-  donations: {
-    type: Array,
-    default: () => []
-  },
+  donations: { type: Array, default: () => [] },
+  isLoadind: { type: Boolean, default: false },
   pagination: {
     type: Object,
     default: () => ({
@@ -19,23 +21,14 @@ const props = defineProps({
       per_page: 10
     })
   },
-  isLoading: {
-    type: Boolean,
-    default: false
-  },
-  handleDonations: {
-    type: Function,
-    default: () => { }
-  }
+  handleDonations: { type: Function, default: () => { } }
 })
 
 // ✅ Emits for pagination and edit
 const emit = defineEmits(['page-change', 'edit-donation'])
 
-// ✅ Trigger edit modal with selected donation
-const openEditModal = (donation) => {
-  emit('edit-donation', donation)
-}
+// ✅ Open edit modal
+const openEditModal = (donation) => emit('edit-donation', donation)
 
 // ✅ Delete donation
 const deleteDonation = async (id) => {
@@ -48,12 +41,21 @@ const deleteDonation = async (id) => {
     toast.error('Error deleting donation')
   }
 }
+
+// ✅ Image Popup Functions
+function openPopup(url) {
+  popupUrl.value = url
+  showPopup.value = true
+}
+function closePopup() {
+  showPopup.value = false
+}
 </script>
 
 <template>
   <div class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
     <div class="overflow-x-auto">
-      <ClipLoader v-if="props.isLoading" color="#f59e0b" size="50px" class="m-6" />
+      <ClipLoader v-if="props.isLoadind" color="#f59e0b" size="50px" class="m-6" />
       <table class="min-w-full text-sm" v-else>
         <thead class="bg-slate-50 text-slate-700 border-b border-slate-200">
           <tr>
@@ -92,10 +94,10 @@ const deleteDonation = async (id) => {
             </td>
 
             <td class="px-4 py-3 text-blue-600">
-              <a v-if="donation.proof" :href="`${baseUrl}/${donation.proof}`" target="_blank"
+              <button v-if="donation.proof" @click="openPopup(`${baseUrl}/${donation.proof}`)"
                 class="underline hover:text-blue-800 text-sm">
                 View
-              </a>
+              </button>
               <span v-else class="text-slate-400 text-sm">—</span>
             </td>
 
@@ -124,7 +126,8 @@ const deleteDonation = async (id) => {
     </div>
 
     <!-- ✅ Pagination -->
-    <div class="flex flex-wrap justify-between items-center px-6 py-4 border-t border-slate-200 bg-slate-50" v-if="props.pagination?.last_page > 1">
+    <div class="flex flex-wrap justify-between items-center px-6 py-4 border-t border-slate-200 bg-slate-50"
+      v-if="props.pagination?.last_page > 1">
       <div class="text-sm text-slate-600">
         Page {{ props.pagination?.current_page || 1 }} of {{ props.pagination?.last_page || 1 }}
       </div>
@@ -143,5 +146,18 @@ const deleteDonation = async (id) => {
         </button>
       </div>
     </div>
+
+    <!-- ✅ Image Popup -->
+    <div v-if="showPopup" class="fixed inset-0 bg-black/50  backdrop-blur-sm flex items-center justify-center z-50"
+      @click.self="closePopup">
+      <div class="relative bg-white p-3 rounded-xl shadow-2xl">
+        <button @click="closePopup"
+          class="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center">
+          ✕
+        </button>
+        <img :src="popupUrl" alt="Donation Proof" class="max-h-[80vh] max-w-[90vw] rounded-lg object-contain" />
+      </div>
+    </div>
+
   </div>
 </template>

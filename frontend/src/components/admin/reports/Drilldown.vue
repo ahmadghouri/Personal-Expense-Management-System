@@ -148,11 +148,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute} from 'vue-router';
 import api from '../../../Api/AxiosBase';
 
 const route = useRoute();
-const router = useRouter();
 
 const expenses = ref([]);
 const totalAmount = ref(0);
@@ -234,10 +233,6 @@ const fetchDrilldown = async () => {
     }
 };
 
-// Go back
-const goBack = () => {
-    router.back();
-};
 
 // Load on mount
 onMounted(async () => {
