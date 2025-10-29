@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ExpenseExport;
 use App\Models\Category;
 use App\Models\Donation;
+use App\Models\DonationType;
 use App\Models\Expense;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ReportingController extends Controller
 {
@@ -44,8 +41,9 @@ class ReportingController extends Controller
         $user = Auth::user();
 
         // Get all categories and donation types names
-        $categories = \App\Models\Category::pluck('name')->toArray();
-        $donationTypes = \App\Models\DonationType::pluck('name')->toArray();
+        $categories = Category::pluck('name')->toArray();
+
+        $donationTypes = DonationType::pluck('name')->toArray();
 
         // Merge both for result initialization
         $allCategories = array_unique(array_merge($categories, $donationTypes));
@@ -326,16 +324,15 @@ class ReportingController extends Controller
             $query->where('payment_mode', $request->payment_mode);
         }
 
-       if ($request->filled('donation_type')) {
-    $query = Donation::with('donationType'); // ✅ include related model
+        if ($request->filled('donation_type')) {
+            $query = Donation::with('donationType'); // ✅ include related model
 
-    if ($user->role === 'manager') {
-        $query->where('user_id', $user->id);
-    }
+            if ($user->role === 'manager') {
+                $query->where('user_id', $user->id);
+            }
 
-    $query->where('donation_type_id', (int) $request->donation_type);
-}
-
+            $query->where('donation_type_id', (int) $request->donation_type);
+        }
 
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('expense_date', [$request->start_date, $request->end_date]);
@@ -363,7 +360,4 @@ class ReportingController extends Controller
         ]);
 
     }
-
 }
-
-

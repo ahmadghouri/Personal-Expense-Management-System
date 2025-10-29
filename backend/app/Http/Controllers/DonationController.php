@@ -45,7 +45,7 @@ class DonationController extends Controller
         $path = null;
 
         if ($request->hasFile('proof')) {
-            $path = $request->file('proof')->store('donations', 'public');
+            $path = $request->file('proof')->store('proofs', 'public');
         }
 
         $donation = Donation::create([
@@ -90,7 +90,7 @@ class DonationController extends Controller
             if ($donation->proof && Storage::disk('public')->exists($donation->proof)) {
                 Storage::disk('public')->delete($donation->proof);
             }
-            $donation->proof = $request->file('proof')->store('donations', 'public');
+            $donation->proof = $request->file('proof')->store('proofs', 'public');
         }
         $donation->update($request->except('proof'));
 

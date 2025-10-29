@@ -30,20 +30,6 @@ class ExpenseController extends Controller
         return response()->json($expenses);
     }
 
-    // public function index()
-    // {
-    //     $user = Auth::user();
-    //     if ($user->role === 'admin') {
-    //         $expenses = Expense::with('category', 'user')->get();
-    //     } else {
-    //         $expenses = Expense::with('category', 'user')->where('user_id', $user->id)->latest()->get();
-    //     }
-
-    //     return response()->json([
-    //         'expenses' => $expenses,
-    //     ]);
-    // }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -73,25 +59,6 @@ class ExpenseController extends Controller
         return response()->json(['message' => 'Expense added successfully', 'expense' => $expense]);
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $expense = Expense::findOrFail($id);
-
-    //     if (Auth::user()->role !== 'admin' && $expense->user_id !== Auth::id()) {
-    //         return response()->json(['error' => 'Unauthorized'], 403);
-    //     }
-    //     $request->validate([
-    //         'category_id' => 'required|exists:categories,id',
-    //         'expense_date' => 'required|date',
-    //         'amount' => 'required|numeric|min:0',
-    //         'payment_mode' => 'required|string',
-    //     ]);
-
-    //     $expense->update($request->all());
-
-    //     return response()->json(['message' => 'Expense updated successfully']);
-    // }
-
     public function update(Request $request, $id)
     {
         $expense = Expense::findOrFail($id);
@@ -105,6 +72,7 @@ class ExpenseController extends Controller
             'expense_date' => 'required|date',
             'amount' => 'required|numeric|min:0',
             'payment_mode' => 'required|string|in:Cash,Credit Card,Debit Card,Bank Transfer,Mobile Wallet',
+            'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         $expense->update([
@@ -115,9 +83,11 @@ class ExpenseController extends Controller
             'description' => $request->description,
             'subcategory' => $request->subcategory,
         ]);
-
         if ($request->hasFile('attachment')) {
-            $path = $request->file('attachment')->store('attachments', 'public');
+            if ($expense->attachment && Storage::disk('public')->exists($expense->attachment)) {
+                Storage::disk('public')->delete($expense->attachment);
+            }
+            $path = $request->file('attachment')->store('attachment', 'public');
             $expense->attachment = $path;
             $expense->save();
         }
