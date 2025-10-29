@@ -42,12 +42,9 @@ import { useRouter } from "vue-router";
 import api from "../../Api/AxiosBase";
 
 import { useToast } from 'vue-toastification'
-// import {useAuthStore} from "../../stores/auth";
-// const auth = useAuthStore();
 const toast = useToast()
 
 const router = useRouter();
-// const authStore = useAuthStore()
 
 const email = ref("");
 const password = ref("");
@@ -63,8 +60,6 @@ const loginFormHandler = async () => {
     localStorage.setItem('user_role', res.data.user_role);
     toast.success(res.data.user_role === 'admin' ? 'Admin Login Successful' : 'Manager Login Successful')
 
-    // await auth.fetchUser();
-    
     if (res.data.user_role === 'admin') {
       router.push({ name: "AdminDashboard" });
     } else {

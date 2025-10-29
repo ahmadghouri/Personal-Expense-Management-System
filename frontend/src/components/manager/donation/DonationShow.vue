@@ -24,13 +24,10 @@ const props = defineProps({
   handleDonations: { type: Function, default: () => { } }
 })
 
-// ✅ Emits for pagination and edit
 const emit = defineEmits(['page-change', 'edit-donation'])
 
-// ✅ Open edit modal
 const openEditModal = (donation) => emit('edit-donation', donation)
 
-// ✅ Delete donation
 const deleteDonation = async (id) => {
   try {
     await api.delete(`donations/${id}`)
@@ -42,7 +39,6 @@ const deleteDonation = async (id) => {
   }
 }
 
-// ✅ Image Popup Functions
 function openPopup(url) {
   popupUrl.value = url
   showPopup.value = true

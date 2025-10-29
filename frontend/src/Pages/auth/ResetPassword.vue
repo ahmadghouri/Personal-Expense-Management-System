@@ -4,7 +4,6 @@
             <h2 class="text-2xl font-bold text-center mb-6">Reset Password</h2>
 
             <form @submit.prevent="submitReset">
-                <!-- New Password -->
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="password">New Password</label>
                     <input type="password" id="password" v-model="password" placeholder="Enter new password"
@@ -12,7 +11,6 @@
                         required />
                 </div>
 
-                <!-- Confirm Password -->
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2" for="confirmPassword">Confirm Password</label>
                     <input type="password" id="confirmPassword" v-model="password_confirmation"

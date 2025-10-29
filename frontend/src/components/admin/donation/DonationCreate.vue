@@ -17,7 +17,6 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 const closeModal = () => emit('close')
 
-// ✅ Function for current date
 function getTodayDate() {
   const today = new Date()
   const yyyy = today.getFullYear()
@@ -26,7 +25,6 @@ function getTodayDate() {
   return `${yyyy}-${mm}-${dd}`
 }
 
-// ✅ Reactive form data
 const donationForm = ref({
   category_id: '',
   donation_type_id: '',
@@ -37,7 +35,6 @@ const donationForm = ref({
   proof_attachment: null
 })
 
-// ✅ Automatically set “Donation” category on mount
 onMounted(() => {
   const donationCategory = props.categorys.find(c => c.name === 'Donation')
   if (donationCategory) {
@@ -45,7 +42,6 @@ onMounted(() => {
   }
 })
 
-// ✅ Watch for edit data and prefill
 watch(
   () => props.donationToEdit,
   (newVal) => {
@@ -64,13 +60,11 @@ watch(
   { immediate: true }
 )
 
-// ✅ File upload handler
 const handleFileUpload = (e) => {
   const file = e.target.files[0]
   donationForm.value.proof_attachment = file instanceof File ? file : null
 }
 
-// ✅ Submit form (create or update)
 const handleSubmitDonation = async () => {
   try {
     const formData = new FormData()
@@ -127,7 +121,6 @@ const handleSubmitDonation = async () => {
       <!-- Form Body -->
       <div class="px-6 py-6 space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <!-- ✅ Fixed Category (Donation only) -->
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">
               Category <span class="text-red-500">*</span>

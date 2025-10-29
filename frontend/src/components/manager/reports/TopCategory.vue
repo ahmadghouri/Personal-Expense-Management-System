@@ -100,29 +100,22 @@
 import { ref, computed, onMounted } from 'vue';
 import api from '../../../Api/AxiosBase';
 
-// --- State and Constants ---
 const topCategories = ref([]);
 const loading = ref(false);
-const API_URL = '/reports/top-categories'; // Aap ki API URL
+const API_URL = '/reports/top-categories';
 
-// --- Computed Properties ---
 const totalAmount = computed(() => {
-  // Ensure correct parsing of the amount string from API for calculation
   return topCategories.value.reduce((sum, cat) => {
-    // Remove all non-digit and non-dot characters (if your API returns formatted string like "10,000.00")
     const amountString = String(cat.total_amount).replace(/,/g, '');
     const amount = parseFloat(amountString);
-    return sum + (isNaN(amount) ? 0 : amount); // Handle non-numeric values gracefully
+    return sum + (isNaN(amount) ? 0 : amount); 
   }, 0);
 });
 
-// --- Helper Functions ---
 const formatAmount = (amount) => {
-  // Check if amount is already a formatted string (like '10,000.00' from API)
   if (typeof amount === 'string' && amount.includes(',')) {
     return amount;
   }
-  // Convert to number and format with commas and two decimal places
   const numAmount = parseFloat(String(amount).replace(/,/g, ''));
   if (isNaN(numAmount)) return '0.00';
   return numAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -136,24 +129,21 @@ const getPercentage = (amount) => {
 };
 
 const getMedal = (index) => {
-  // Better emojis for visual interest
   const medals = ['🥇 Top Spender', '🥈 Second Spot', '🥉 Third Place', '✨ High Rank', '🌟 Top 5'];
   return medals[index] || '💡 Analyzed';
 };
 
-// Progress Bar Colors (Used in template for the progress bar itself)
 const getRankColor = (index) => {
   const colors = [
-    'bg-gradient-to-r from-yellow-400 to-amber-500', // Gold for 1st
-    'bg-gradient-to-r from-gray-400 to-gray-500',   // Silver for 2nd
-    'bg-gradient-to-r from-amber-600 to-orange-700', // Bronze for 3rd
-    'bg-gradient-to-r from-sky-500 to-blue-600',    // Blue for 4th
-    'bg-gradient-to-r from-indigo-500 to-purple-600' // Purple for 5th
+    'bg-gradient-to-r from-yellow-400 to-amber-500', 
+    'bg-gradient-to-r from-gray-400 to-gray-500',   
+    'bg-gradient-to-r from-amber-600 to-orange-700', 
+    'bg-gradient-to-r from-sky-500 to-blue-600',    
+    'bg-gradient-to-r from-indigo-500 to-purple-600' 
   ];
   return colors[index] || 'bg-gradient-to-r from-slate-400 to-slate-500';
 };
 
-// Rank Badge Colors (Used in template for the circular badge)
 const getRankBadgeColor = (index) => {
   const colors = [
     'bg-yellow-500 text-white',
@@ -170,16 +160,12 @@ const fetchTopCategories = async () => {
   loading.value = true;
   try {
     const response = await api.get(API_URL);
-    // Assuming API response has a key like 'data' or 'top_categories'
-    // Adjust 'response.data.top_5_categories' based on your actual API structure
     topCategories.value = response.data.top_5_categories || response.data || [];
-    // Only keep the top 5, just in case
     topCategories.value = topCategories.value.slice(0, 5);
 
   } catch (error) {
     console.error('Error fetching top categories:', error);
     topCategories.value = [];
-    // Display a more user-friendly error
     alert('Failed to load top categories. Check your API connection.');
   } finally {
     loading.value = false;

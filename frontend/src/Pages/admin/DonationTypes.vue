@@ -37,7 +37,6 @@ const filterDonationTypes = computed(() => {
     )
 })
 function handleUpdate(updatedUser) {
-    // const index = users.value.findIndex(u => u.id === updatedUser.id);
     const index = allDonationTypes.value.findIndex(u => u.id === updatedUser.id);
     if (index !== -1) {
         allDonationTypes.value[index] = updatedUser;
@@ -67,10 +66,8 @@ function handleUpdate(updatedUser) {
         </div>
     </div>
 
-    <!-- User Register -->
     <DonationTypeCreate v-if="showModal" :donationType="selectedUser" @close="showModal = false" @update="handleUpdate"
         :handleDonationType="handleDonationType" />
 
-    <!-- User List -->
     <DonationTypeShow :donationTypes="filterDonationTypes" :handleDonationType="handleDonationType" :isLoadind="isLoadind" />
 </template>

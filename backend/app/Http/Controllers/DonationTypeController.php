@@ -65,7 +65,6 @@ class DonationTypeController extends Controller
     {
         $type = DonationType::findOrFail($id);
         $type->delete();
-
         return response()->json(['message' => 'Donation Type deleted successfully']);
     }
 }

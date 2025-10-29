@@ -97,9 +97,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Expense Cards -->
-
-
             <!-- Table View Toggle -->
             <div v-if="expenses.length > 0" class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-6 border-b border-gray-200">
@@ -166,13 +163,11 @@ const selectedCategoryId = ref('');
 const categories = ref([]);
 const loading = ref(false);
 
-// Calculate average amount
 const averageAmount = computed(() => {
     if (expenses.value.length === 0) return 0;
     return totalAmount.value / expenses.value.length;
 });
 
-// Format currency
 const formatCurrency = (amount) => {
     const numAmount = parseFloat(amount);
     return new Intl.NumberFormat('en-PK', {
@@ -183,7 +178,6 @@ const formatCurrency = (amount) => {
     }).format(numAmount);
 };
 
-// Format date
 const formatDate = (date) => {
     if (!date) return '-';
     return new Date(date).toLocaleDateString('en-PK', {
@@ -195,7 +189,6 @@ const formatDate = (date) => {
 
 
 
-// Get payment badge color
 const getPaymentBadgeColor = (mode) => {
     const colors = {
         'cash': 'bg-green-100 text-green-800',
@@ -206,7 +199,6 @@ const getPaymentBadgeColor = (mode) => {
     return colors[mode?.toLowerCase()] || 'bg-gray-100 text-gray-800';
 };
 
-// Fetch categories
 const fetchCategories = async () => {
     try {
         const response = await api.get('/categories');
@@ -216,7 +208,6 @@ const fetchCategories = async () => {
     }
 };
 
-// Fetch drill-down data
 const fetchDrilldown = async () => {
     if (!selectedCategoryId.value) return;
 
@@ -226,7 +217,6 @@ const fetchDrilldown = async () => {
         expenses.value = response.data.expenses || [];
         totalAmount.value = parseFloat(response.data.total_amount) || 0;
 
-        // Get category name
         const category = categories.value.find(c => c.id == selectedCategoryId.value);
         categoryName.value = category?.name || 'Unknown Category';
     } catch (error) {
@@ -239,14 +229,11 @@ const fetchDrilldown = async () => {
     }
 };
 
-// Go back
 
 
-// Load on mount
 onMounted(async () => {
     await fetchCategories();
 
-    // Get category ID from route params or query
     const categoryId = route.params.categoryId || route.query.categoryId;
     if (categoryId) {
         selectedCategoryId.value = categoryId;

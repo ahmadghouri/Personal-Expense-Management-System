@@ -20,7 +20,6 @@ const emit = defineEmits(['close', 'update']);
 const name = ref('');
 const description = ref('');
 
-// Prefill data when editing
 watch(() => props.donationType, (newDonationType) => {
     if (newDonationType) {
         name.value = newDonationType.name || '';
@@ -34,7 +33,6 @@ watch(() => props.donationType, (newDonationType) => {
 async function submitForm() {
     try {
         if (props.donationType) {
-            // ✏️ Update mode
             await api.put(`/donation-types/${props.donationType.id}`, {      
                 name: name.value,
                 description: description.value,
@@ -43,7 +41,6 @@ async function submitForm() {
             props.handleDonationType?.()
             closeModal();
         } else {
-            // 🆕 Create mode
             await api.post('/donation-types', {
                 name: name.value,
                 description: description.value,

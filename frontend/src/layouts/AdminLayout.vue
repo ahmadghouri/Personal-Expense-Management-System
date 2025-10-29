@@ -1,7 +1,6 @@
 <script setup>
 import {useAuthStore} from "../stores/auth";
 const auth = useAuthStore();
-// const { logout } = useAuth();
 
 const navLink = [
   { to: '/admin/dashboard', name: "Dashboard" },

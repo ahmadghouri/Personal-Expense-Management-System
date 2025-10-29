@@ -1,7 +1,6 @@
 <template>
     <div class=" bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 pt-6">
         <div class=" mx-auto">
-            <!-- Header with Back Button -->
             <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
@@ -14,7 +13,6 @@
                         </div>
                     </div>
 
-                    <!-- Category Selector -->
                     <div class="flex items-center gap-3">
                         <select v-model="selectedCategoryId" @change="fetchDrilldown"
                             class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all font-medium">
@@ -27,10 +25,8 @@
                 </div>
             </div>
 
-            <!-- Loading State -->
           <ClipLoader v-if="loading" color="#f59e0b" size="50px" class="m-6 text-center items-center" />
 
-            <!-- No Data State -->
             <div v-else-if="!loading && expenses.length === 0" class="bg-white rounded-2xl shadow-xl p-12 text-center">
                 <svg class="w-20 h-20 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -40,9 +36,9 @@
                 <p class="text-sm text-gray-500 mt-2">Select a category to view expense details</p>
             </div>
 
-            <!-- Summary Cards -->
+          
             <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <!-- Total Amount -->
+               
                 <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
@@ -58,7 +54,7 @@
                     </div>
                 </div>
 
-                <!-- Total Entries -->
+              
                 <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-xl p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
@@ -74,7 +70,7 @@
                     </div>
                 </div>
 
-                <!-- Average Amount -->
+                
                 <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-xl p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
@@ -91,10 +87,6 @@
                 </div>
             </div>
 
-            <!-- Expense Cards -->
-
-
-            <!-- Table View Toggle -->
             <div v-if="expenses.length > 0" class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-6 border-b border-gray-200">
                     <h2 class="text-xl font-bold text-gray-800">Detailed Table View</h2>
@@ -159,15 +151,12 @@ const selectedCategoryId = ref('');
 const categories = ref([]);
 const loading = ref(false);
 
-// Calculate average amount
 const averageAmount = computed(() => {
     if (expenses.value.length === 0) return 0;
     return totalAmount.value / expenses.value.length;
 });
-console.log(expenses.value);
 
 
-// Format currency
 const formatCurrency = (amount) => {
     const numAmount = parseFloat(amount);
     return new Intl.NumberFormat('en-PK', {
@@ -178,7 +167,6 @@ const formatCurrency = (amount) => {
     }).format(numAmount);
 };
 
-// Format date
 const formatDate = (date) => {
     if (!date) return '-';
     return new Date(date).toLocaleDateString('en-PK', {
@@ -190,7 +178,6 @@ const formatDate = (date) => {
 
 
 
-// Get payment badge color
 const getPaymentBadgeColor = (mode) => {
     const colors = {
         'cash': 'bg-green-100 text-green-800',
@@ -201,7 +188,6 @@ const getPaymentBadgeColor = (mode) => {
     return colors[mode?.toLowerCase()] || 'bg-gray-100 text-gray-800';
 };
 
-// Fetch categories
 const fetchCategories = async () => {
     try {
         const response = await api.get('/categories');
@@ -211,7 +197,6 @@ const fetchCategories = async () => {
     }
 };
 
-// Fetch drill-down data
 const fetchDrilldown = async () => {
     if (!selectedCategoryId.value) return;
 
@@ -219,7 +204,6 @@ const fetchDrilldown = async () => {
     try {
         const response = await api.get(`/reports/drilldown/${selectedCategoryId.value}`);
         expenses.value = response.data.records || [];
-        console.log(response.data.records);
         
         totalAmount.value = parseFloat(response.data.total_amount) || 0;
 
@@ -237,11 +221,9 @@ const fetchDrilldown = async () => {
 };
 
 
-// Load on mount
 onMounted(async () => {
     await fetchCategories();
 
-    // Get category ID from route params or query
     const categoryId = route.params.categoryId || route.query.categoryId;
     if (categoryId) {
         selectedCategoryId.value = categoryId;
@@ -251,7 +233,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* Line clamp utility */
 .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

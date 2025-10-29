@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class ReportingController extends Controller
 {
-    // 🔹 1. Summary (Expense + Donation)
+
     public function summary()
     {
         $user = Auth::user();
@@ -35,20 +35,20 @@ class ReportingController extends Controller
         ]);
     }
 
-    // 🔹 2. Category-wise Expense + Donation Breakdown
+
     public function categoryBreakdown()
     {
         $user = Auth::user();
 
-        // Get all categories and donation types names
+
         $categories = Category::pluck('name')->toArray();
 
         $donationTypes = DonationType::pluck('name')->toArray();
 
-        // Merge both for result initialization
+
         $allCategories = array_unique(array_merge($categories, $donationTypes));
 
-        // Initialize result with 0 totals
+
         $result = collect($allCategories)->mapWithKeys(function ($category) {
             return [$category => [
                 'category' => $category,
@@ -57,7 +57,7 @@ class ReportingController extends Controller
             ]];
         });
 
-        // Expenses
+
         $expenseQuery = Expense::select('categories.name as category', DB::raw('SUM(expenses.amount) as total'))
             ->join('categories', 'expenses.category_id', '=', 'categories.id');
 
@@ -75,7 +75,7 @@ class ReportingController extends Controller
             }
         }
 
-        // Donations
+
         $donationQuery = Donation::select('donation_types.name as category', DB::raw('SUM(donations.amount) as total'))
             ->join('donation_types', 'donations.donation_type_id', '=', 'donation_types.id');
 
@@ -125,7 +125,7 @@ class ReportingController extends Controller
     {
         $user = Auth::user();
 
-        // Expenses
+
         $expenseQuery = Expense::select('category_id', DB::raw('SUM(amount) as total'))
             ->groupBy('category_id');
 
@@ -135,7 +135,7 @@ class ReportingController extends Controller
 
         $expenses = $expenseQuery->get();
 
-        // Donations
+
         $donationQuery = Donation::select('category_id', DB::raw('SUM(amount) as total'))
             ->groupBy('category_id');
 
@@ -145,7 +145,7 @@ class ReportingController extends Controller
 
         $donations = $donationQuery->get();
 
-        // Combine totals
+
         $combined = collect();
 
         foreach ($expenses as $item) {
@@ -166,7 +166,7 @@ class ReportingController extends Controller
             }
         }
 
-        // Preload category names to avoid repeated DB hits
+
         $categoryNames = Category::pluck('name', 'id')->toArray();
 
         $top = $combined->sortByDesc('total_amount')->take(5)->map(function ($item) use ($categoryNames) {
@@ -184,15 +184,15 @@ class ReportingController extends Controller
 {
     $user = Auth::user();
 
-    // Category check karo
+
     $category = Category::find($categoryId);
     if (! $category) {
         return response()->json(['error' => 'Invalid category ID'], 404);
     }
 
-    // Agar category ka naam "Donation" ho to Donation Model ka data lao
+
     if (strtolower($category->name) === 'donation') {
-        $query = Donation::with('donationType') // 👈 yahan DonationType relation include karo
+        $query = Donation::with('donationType')
             ->where('category_id', $categoryId);
 
         if ($user->role === 'manager') {
@@ -207,7 +207,7 @@ class ReportingController extends Controller
             'records' => $data->map(function ($donation) {
                 return [
                     'id' => $donation->id,
-                    'donation_type' => $donation->donationType->name ?? 'N/A', // 👈 name Donation_types table se
+                    'donation_type' => $donation->donationType->name ?? 'N/A',
                     'amount' => $donation->amount,
                     'date' => $donation->created_at->format('Y-m-d'),
                     'proof' => $donation->proof,
@@ -217,7 +217,7 @@ class ReportingController extends Controller
         ]);
     }
 
-    // Default Expense Model ka data
+
     $query = Expense::with('category')
         ->where('category_id', $categoryId)
         ->orderByDesc('expense_date');
@@ -279,7 +279,7 @@ class ReportingController extends Controller
         }
         $donations = $donationQuery->groupBy('month')->orderBy('month')->get();
 
-        // Merge expenses + donations by month
+
         $combined = [];
         foreach ($expenses as $item) {
             $combined[$item->month]['month'] = $item->month;
@@ -354,7 +354,7 @@ class ReportingController extends Controller
         }
 
         if ($request->filled('donation_type')) {
-            $query = Donation::with('donationType'); // ✅ include related model
+            $query = Donation::with('donationType');
 
             if ($user->role === 'manager') {
                 $query->where('user_id', $user->id);

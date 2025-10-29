@@ -37,7 +37,6 @@ const filterCategory = computed(() => {
     )
 })
 function handleUpdate(updatedUser) {
-    // const index = users.value.findIndex(u => u.id === updatedUser.id);
     const index = allCategorys.value.findIndex(u => u.id === updatedUser.id);
     if (index !== -1) {
         allCategorys.value[index] = updatedUser;

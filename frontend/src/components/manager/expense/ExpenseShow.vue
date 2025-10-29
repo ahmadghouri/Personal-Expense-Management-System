@@ -7,7 +7,6 @@ const toast = useToast()
 const baseUrl = api.defaults.baseURL.replace('/api', '')
 const showPopup = ref(false)
 const popupUrl = ref('')
-// ✅ Props
 const props = defineProps({
   expenses: {
     type: Array,
@@ -31,15 +30,12 @@ const props = defineProps({
   }
 })
 
-// ✅ Emits for pagination and edit
 const emit = defineEmits(['page-change', 'edit-expense'])
 
-// ✅ Trigger edit modal with selected expense
 const openEditModal = (expense) => {
   emit('edit-expense', expense)
 }
 
-// ✅ Delete expense
 const deleteExpense = async (id) => {
   try {
     await api.delete(`expenses/${id}`)

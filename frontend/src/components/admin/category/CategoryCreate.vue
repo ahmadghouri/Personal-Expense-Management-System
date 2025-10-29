@@ -20,7 +20,6 @@ const emit = defineEmits(['close', 'update']);
 const name = ref('');
 const description = ref('');
 
-// Prefill data when editing
 watch(() => props.category, (newCategory) => {
     if (newCategory) {
         name.value = newCategory.name || '';
@@ -34,7 +33,6 @@ watch(() => props.category, (newCategory) => {
 async function submitForm() {
     try {
         if (props.category) {
-            // ✏️ Update mode
             await api.put(`/categories/${props.category.id}`, {
                 name: name.value,
                 description: description.value,
@@ -43,7 +41,6 @@ async function submitForm() {
             props.handleCategory?.()
             closeModal();
         } else {
-            // 🆕 Create mode
             await api.post('/categories', {
                 name: name.value,
                 description: description.value,
@@ -75,7 +72,7 @@ function closeModal() {
                 </button>
 
                 <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
-                    {{ props.user ? '✏️ Edit Category' : '👤 Create New Category' }}
+                    {{ props.user ? ' Edit Category' : ' Create New Category' }}
                 </h2>
 
                 <form @submit.prevent="submitForm" class="space-y-4">

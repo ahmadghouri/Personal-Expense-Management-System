@@ -63,7 +63,6 @@ import api from '../../../Api/AxiosBase'
 
 Chart.register(ArcElement, Tooltip, Legend, Title)
 
-// --- States ---
 const expenseData = ref([])
 const filteredData = ref([])
 const chartInstance = ref(null)
@@ -74,7 +73,6 @@ const endDate = ref('')
 const selectedCategory = ref('')
 const categories = ref([])
 
-// --- Fallback data ---
 const fallbackData = [
   { category: 'Rent', total: 430825, percentage: 55.72 },
   { category: 'Transport', total: 246303, percentage: 31.86 },
@@ -84,14 +82,12 @@ const fallbackData = [
   { category: 'Utilities', total: 7963, percentage: 1.03 }
 ]
 
-// --- Colors ---
 const colorPalette = [
   '#3B82F6', '#10B981', '#F59E0B',
   '#EF4444', '#8B5CF6', '#14B8A6',
   '#EAB308', '#F97316'
 ]
 
-// --- Fetch categories ---
 const handleCategory = async () => {
   try {
     const res = await api.get('/categories')
@@ -103,7 +99,6 @@ const handleCategory = async () => {
   }
 }
 
-// --- Fetch expense data ---
 const fetchExpenseData = async () => {
   try {
     const res = await api.get('/reports/pie', {
@@ -116,7 +111,6 @@ const fetchExpenseData = async () => {
 
     const data = res.data?.data
 
-    // Handle both array and object responses safely
     if (Array.isArray(data)) {
       expenseData.value = data
     } else if (Array.isArray(res.data)) {
@@ -134,7 +128,6 @@ const fetchExpenseData = async () => {
   filteredData.value = [...expenseData.value]
 }
 
-// --- Render Chart ---
 const renderChart = () => {
   const ctx = chartRef.value?.getContext('2d')
   if (!ctx) return
@@ -180,7 +173,6 @@ const renderChart = () => {
   })
 }
 
-// --- Filter Function ---
 const filterChart = async () => {
   await fetchExpenseData()
 
@@ -193,7 +185,6 @@ const filterChart = async () => {
   renderChart()
 }
 
-// --- Lifecycle ---
 onMounted(async () => {
   await handleCategory()
   await fetchExpenseData()

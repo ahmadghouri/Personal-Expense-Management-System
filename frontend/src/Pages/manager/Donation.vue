@@ -27,7 +27,6 @@ const filters = ref({
   maxAmount: ''
 })
 
-// ✅ Fetch donation types
 const handleDonationTypes = async () => {
   try {
     const response = await api.get('donation-types')
@@ -48,7 +47,6 @@ const handleCategory = async () => {
 
 const categorys = ref([])
 
-// ✅ Fetch donations
 const handleDonations = async (page = 1) => {
   try {
     isLoading.value = true
@@ -66,14 +64,12 @@ const handleDonations = async (page = 1) => {
   }
 }
 
-// ✅ Handle edit trigger
 const handleEditDonation = (donation) => {
   selectedDonation.value = donation
   editMode.value = true
   showModal.value = true
 }
 
-// ✅ Filtered Donations
 const filteredDonations = computed(() => {
   if (!Array.isArray(donations.value)) return []
 
@@ -113,7 +109,6 @@ const filteredDonations = computed(() => {
   })
 })
 
-// ✅ Clear Filters
 const clearFilters = () => {
   filters.value = {
     type: '',
@@ -125,7 +120,6 @@ const clearFilters = () => {
   search.value = ''
 }
 
-// ✅ Reset modal state
 const closeModal = () => {
   showModal.value = false
   editMode.value = false
@@ -153,7 +147,6 @@ onMounted(() => {
       </button>
     </div>
 
-    <!-- Search & Filter Bar -->
     <div class="space-y-4">
       <div class="flex gap-4">
         <div class="flex-1 relative">
@@ -178,7 +171,6 @@ onMounted(() => {
         </button>
       </div>
 
-      <!-- Advanced Filters -->
       <div v-if="showFilters" class="bg-slate-50 p-4 rounded-lg border border-slate-200">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -227,11 +219,9 @@ onMounted(() => {
     </div>
   </div>
 
-  <!-- ✅ Donation List -->
   <DonationShow :donations="filteredDonations" :handleDonations="handleDonations" :isLoading="isLoading" :pagination="pagination"
     @page-change="handleDonations" @edit-donation="handleEditDonation" />
 
-  <!-- ✅ Create / Edit Modal -->
   <DonationCreate v-if="showModal" :categorys="categorys" :handleDonations="handleDonations" :showModal="showModal" :editMode="editMode"
     :donationToEdit="selectedDonation" :donationTypes="donationTypes" @close="closeModal" />
 </template>

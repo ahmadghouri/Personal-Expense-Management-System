@@ -61,10 +61,8 @@ import api from '../../../Api/AxiosBase'
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement)
 
-// --- State ---
 const categoryBreakdown = ref([])
 
-// --- Fetch data from API ---
 const handleCategoryBreakdown = async () => {
   try {
     const response = await api.get('/reports/category')
@@ -82,7 +80,7 @@ onMounted(() => {
   handleCategoryBreakdown()
 })
 
-// --- Expense Pie Chart ---
+// Expense Pie Chart
 const expensePieData = computed(() => ({
   labels: categoryBreakdown.value
     .filter((c) => c.expense_total > 0)
@@ -101,7 +99,7 @@ const expensePieData = computed(() => ({
   ],
 }))
 
-// --- Donation Pie Chart ---
+// Donation Pie Chart 
 const donationPieData = computed(() => ({
   labels: categoryBreakdown.value
     .filter((c) => c.donation_total > 0)

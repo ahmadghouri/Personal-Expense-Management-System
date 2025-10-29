@@ -27,7 +27,6 @@ const filters = ref({
   maxAmount: ''
 })
 
-// ✅ Fetch categories
 const handleCategory = async () => {
   try {
     const response = await api.get('categories')
@@ -37,7 +36,6 @@ const handleCategory = async () => {
   }
 }
 
-// ✅ Fetch expenses
 const handleExpense = async (page = 1) => {
   try {
     isLoadind.value = true;
@@ -55,14 +53,12 @@ const handleExpense = async (page = 1) => {
   }
 }
 
-// ✅ Handle edit trigger from child
 const handleEditExpense = (expense) => {
   selectedExpense.value = expense
   editMode.value = true
   showModal.value = true
 }
 
-// ✅ Filtered Expenses
 const filteredExpenses = computed(() => {
   return expenses.value.filter((exp) => {
     const searchQuery = search.value.toLowerCase()
@@ -100,7 +96,6 @@ const filteredExpenses = computed(() => {
   })
 })
 
-// ✅ Clear Filters
 const clearFilters = () => {
   filters.value = {
     category: '',
@@ -112,7 +107,6 @@ const clearFilters = () => {
   search.value = ''
 }
 
-// ✅ Reset modal state on close
 const closeModal = () => {
   showModal.value = false
   editMode.value = false
@@ -141,7 +135,6 @@ onMounted(() => {
       </button>
     </div>
 
-    <!-- Search & Filter Bar -->
     <div class="space-y-4">
       <div class="flex gap-4">
         <div class="flex-1 relative">
@@ -165,7 +158,6 @@ onMounted(() => {
         </button>
       </div>
 
-      <!-- Advanced Filters -->
       <div v-if="showFilters" class="bg-slate-50 p-4 rounded-lg border border-slate-200">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -216,7 +208,6 @@ onMounted(() => {
 
   </div>
 
-  <!-- Expense List -->
   <ExpenseShow :expenses="filteredExpenses" :handleExpense="handleExpense" :isLoadind="isLoadind" :pagination="pagination"
     @page-change="handleExpense" @edit-expense="handleEditExpense" />
 

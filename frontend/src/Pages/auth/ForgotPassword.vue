@@ -28,11 +28,9 @@
         </RouterLink>
       </div>
 
-      <!-- Success Message -->
       <p v-if="message" class="mt-4 text-green-500 text-center">
         {{ message }}
       </p>
-      <!-- Error Message -->
       <p v-if="error" class="mt-4 text-red-500 text-center">
         {{ error }}
       </p>

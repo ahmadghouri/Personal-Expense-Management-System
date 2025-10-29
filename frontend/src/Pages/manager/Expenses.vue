@@ -215,7 +215,6 @@ onMounted(() => {
 
   </div>
 
-  <!-- Expense List -->
   <ExpenseShow :expenses="filteredExpenses" :handleExpense="handleExpense" :isLoading="isLoading" :pagination="pagination"
     @page-change="handleExpense" @edit-expense="handleEditExpense" />
 

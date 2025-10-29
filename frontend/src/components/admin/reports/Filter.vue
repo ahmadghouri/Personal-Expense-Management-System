@@ -1,11 +1,10 @@
 <template>
   <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
     <div class="mx-auto">
-      <!-- Filter Form -->
+
       <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Filters</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          <!-- Category Filter -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
             <select v-model="filters.category_id"
@@ -15,7 +14,6 @@
             </select>
           </div>
 
-          <!-- Payment Mode Filter -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Payment Mode</label>
             <select v-model="filters.payment_mode"
@@ -27,7 +25,6 @@
             </select>
           </div>
 
-          <!-- Donation Type Filter -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Donation Type</label>
             <select v-model="filters.donation_type"
@@ -37,21 +34,18 @@
             </select>
           </div>
 
-          <!-- Start Date -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Start Date</label>
             <input type="date" v-model="filters.start_date"
               class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all" />
           </div>
 
-          <!-- End Date -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">End Date</label>
             <input type="date" v-model="filters.end_date"
               class="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all" />
           </div>
 
-          <!-- Filter Button -->
           <div class="flex items-end">
             <button @click="fetchReports" type="button"
               class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transform transition-all hover:scale-105">
@@ -60,13 +54,11 @@
           </div>
         </div>
 
-        <!-- Clear Filters and Export Buttons -->
         <div class="flex flex-wrap items-center justify-between gap-4">
           <button @click="clearFilters" type="button" class="text-sm text-gray-600 hover:text-gray-800 underline">
             Clear All Filters
           </button>
 
-          <!-- Export Buttons -->
           <div class="flex gap-3">
             <button @click="exportToExcel" type="button" :disabled="data.length === 0"
               class="flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-semibold shadow-md transform transition-all hover:scale-105">
@@ -89,9 +81,7 @@
         </div>
       </div>
 
-      <!-- Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <!-- Total Amount Card -->
         <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
           <div class="flex items-center justify-between">
             <div>
@@ -107,7 +97,6 @@
           </div>
         </div>
 
-        <!-- Total Records Card -->
         <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-xl p-6 text-white">
           <div class="flex items-center justify-between">
             <div>
@@ -124,7 +113,6 @@
         </div>
       </div>
 
-      <!-- Top Categories -->
       <div v-if="topCategories.length > 0" class="bg-white rounded-2xl shadow-xl p-6 mb-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Top Categories</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -143,7 +131,6 @@
         </div>
       </div>
 
-      <!-- Data Table -->
       <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="p-6 border-b border-gray-200">
           <h2 class="text-xl font-bold text-gray-800">Data Records</h2>
@@ -240,7 +227,6 @@ const payment_mode = ref([
   { id: 5, name: 'Mobile Wallet' }
 ]);
 
-// Format currency
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('en-PK', {
     style: 'currency',
@@ -250,7 +236,6 @@ const formatCurrency = (amount) => {
   }).format(amount || 0);
 };
 
-// Format date
 const formatDate = (date) => {
   if (!date) return '-';
   return new Date(date).toLocaleDateString('en-PK', {
@@ -260,7 +245,6 @@ const formatDate = (date) => {
   });
 };
 
-// Clear all filters
 const clearFilters = () => {
   filters.value = {
     category_id: '',

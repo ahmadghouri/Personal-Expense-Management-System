@@ -1,12 +1,8 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 md:p-8 rounded-md">
-
-
     <Filter />
     <TopCategory />
     <Drilldown />
-
-
   </div>
 </template>
 

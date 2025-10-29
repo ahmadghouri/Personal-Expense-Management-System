@@ -39,7 +39,6 @@ const filterUser = computed(() => {
     )
 })
 function handleUpdate(updatedUser) {
-    // const index = users.value.findIndex(u => u.id === updatedUser.id);
     const index = allUsers.value.findIndex(u => u.id === updatedUser.id);
     if (index !== -1) {
         users.value[index] = updatedUser;
@@ -69,10 +68,8 @@ function handleUpdate(updatedUser) {
         </div>
     </div>
 
-    <!-- User Register -->
     <UserRegister v-if="showModal" :user="selectedUser" @close="showModal = false" @update="handleUpdate"
         :allUser="allUser" />
 
-    <!-- User List -->
     <UserShow :users="filterUser" :allUser="allUser" :isLoadind="isLoadind" />
 </template>

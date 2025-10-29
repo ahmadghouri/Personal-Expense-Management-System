@@ -1,13 +1,7 @@
 <template>
     <div class=" bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2 rounded-md">
-      
-
         <Filter />
-
-      
         <TopCategory />
-
-
         <Drilldown />
 
 
