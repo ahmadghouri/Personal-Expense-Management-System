@@ -180,33 +180,62 @@ class ReportingController extends Controller
 
     }
 
-    public function drillDown($categoryId)
-    {
+   public function drillDown($categoryId)
+{
+    $user = Auth::user();
 
-        $user = Auth::user();
+    // Category check karo
+    $category = Category::find($categoryId);
+    if (! $category) {
+        return response()->json(['error' => 'Invalid category ID'], 404);
+    }
 
-        // Validate category
-        if (! Category::where('id', $categoryId)->exists()) {
-            return response()->json(['error' => 'Invalid category ID'], 404);
-        }
-
-        // Query expenses
-        $query = Expense::with('category')
-            ->where('category_id', $categoryId)
-            ->orderByDesc('expense_date');
+    // Agar category ka naam "Donation" ho to Donation Model ka data lao
+    if (strtolower($category->name) === 'donation') {
+        $query = Donation::with('donationType') // 👈 yahan DonationType relation include karo
+            ->where('category_id', $categoryId);
 
         if ($user->role === 'manager') {
             $query->where('user_id', $user->id);
         }
 
-        $data = $query->get();
+        $data = $query->orderByDesc('created_at')->get();
 
         return response()->json([
             'category_id' => $categoryId,
-            'expenses' => $data,
+            'type' => 'donation',
+            'records' => $data->map(function ($donation) {
+                return [
+                    'id' => $donation->id,
+                    'donation_type' => $donation->donationType->name ?? 'N/A', // 👈 name Donation_types table se
+                    'amount' => $donation->amount,
+                    'date' => $donation->created_at->format('Y-m-d'),
+                    'proof' => $donation->proof,
+                ];
+            }),
             'total_amount' => $data->sum('amount'),
         ]);
     }
+
+    // Default Expense Model ka data
+    $query = Expense::with('category')
+        ->where('category_id', $categoryId)
+        ->orderByDesc('expense_date');
+
+    if ($user->role === 'manager') {
+        $query->where('user_id', $user->id);
+    }
+
+    $data = $query->get();
+
+    return response()->json([
+        'category_id' => $categoryId,
+        'type' => 'expense',
+        'records' => $data,
+        'total_amount' => $data->sum('amount'),
+    ]);
+}
+
 
     public function donationBreakdown()
     {

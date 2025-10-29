@@ -11,7 +11,6 @@
                                 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                                 Expense Details - {{ categoryName }}
                             </h1>
-                            <p class="text-gray-600 mt-1">Detailed breakdown of all expenses</p>
                         </div>
                     </div>
 
@@ -118,7 +117,7 @@
                                 class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ expense.id }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    <div class="font-semibold">{{ expense.category?.name }}</div>
+                                    <div class="font-semibold">{{`Donation - ${expense.donation_type}` || expense.category?.name }}</div>
                                     <div v-if="expense.subcategory" class="text-xs text-gray-500">{{ expense.subcategory
                                     }}</div>
                                 </td>
@@ -132,7 +131,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
-                                    {{ formatDate(expense.expense_date) }}
+                                    {{ formatDate(expense.date ||expense.expense_date) }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     <span class="line-clamp-2">{{ expense.description || '-' }}</span>
@@ -165,6 +164,8 @@ const averageAmount = computed(() => {
     if (expenses.value.length === 0) return 0;
     return totalAmount.value / expenses.value.length;
 });
+console.log(expenses.value);
+
 
 // Format currency
 const formatCurrency = (amount) => {
@@ -217,7 +218,9 @@ const fetchDrilldown = async () => {
     loading.value = true;
     try {
         const response = await api.get(`/reports/drilldown/${selectedCategoryId.value}`);
-        expenses.value = response.data.expenses || [];
+        expenses.value = response.data.records || [];
+        console.log(response.data.records);
+        
         totalAmount.value = parseFloat(response.data.total_amount) || 0;
 
         // Get category name
