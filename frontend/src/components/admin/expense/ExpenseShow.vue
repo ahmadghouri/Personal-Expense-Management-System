@@ -62,7 +62,7 @@ function closePopup() {
 <template>
   <div class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
     <div class="overflow-x-auto">
-      <ClipLoader v-if="props.isLoadind" color="#f59e0b" size="50px" class="m-6" />
+      <ClipLoader v-if="props.isLoading" color="#f59e0b" size="50px" class="m-6" />
       <table class="min-w-full text-sm" v-else>
         <thead class="bg-slate-50 text-slate-700 border-b border-slate-200">
           <tr>

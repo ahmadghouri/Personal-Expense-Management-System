@@ -7,7 +7,7 @@ import ExpenseCreate from '../../components/admin/expense/ExpenseCreate.vue'
 const showModal = ref(false)
 const editMode = ref(false)
 const selectedExpense = ref(null)
-const isLoadind = ref(false);
+const isLoading = ref(false);
 const categorys = ref([])
 const showFilters = ref(false)
 const expenses = ref([])
@@ -38,7 +38,7 @@ const handleCategory = async () => {
 
 const handleExpense = async (page = 1) => {
   try {
-    isLoadind.value = true;
+    isLoading.value = true;
     const response = await api.get(`expenses?page=${page}&per_page=${pagination.value.per_page}`)
     expenses.value = response.data.data
     pagination.value = {
@@ -46,10 +46,10 @@ const handleExpense = async (page = 1) => {
       last_page: response.data.last_page,
       per_page: response.data.per_page
     }
-    isLoadind.value = false;
+    isLoading.value = false;
   } catch (error) {
     console.log(error)
-    isLoadind.value = false;
+    isLoading.value = false;
   }
 }
 
@@ -208,7 +208,7 @@ onMounted(() => {
 
   </div>
 
-  <ExpenseShow :expenses="filteredExpenses" :handleExpense="handleExpense" :isLoadind="isLoadind" :pagination="pagination"
+  <ExpenseShow :expenses="filteredExpenses" :handleExpense="handleExpense" :isLoading="isLoading" :pagination="pagination"
     @page-change="handleExpense" @edit-expense="handleEditExpense" />
 
   <ExpenseCreate v-if="showModal" :handleExpense="handleExpense" :showModal="showModal" :editMode="editMode"
