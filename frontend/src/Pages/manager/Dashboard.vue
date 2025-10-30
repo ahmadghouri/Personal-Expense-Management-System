@@ -5,23 +5,14 @@
     <div class="relative z-10">
       <h1 class="text-4xl font-bold text-gray-800 mb-2">Manager Dashboard</h1>
     </div>
-
-
     <DashboardOverall/>
-
     <DashboardBreakdown />
-
-    <DashboardMonthly/>
-
+    <Dashboardpercentage/>
   </div>
 </template>
 
 <script setup>
-
 import DashboardBreakdown from '../../components/manager/dashboard/DashboardBreakdown.vue';
 import DashboardOverall from '../../components/manager/dashboard/DashboardOverall.vue';
-import DashboardMonthly from '../../components/manager/dashboard/DashboardMonthly.vue';
-
-
-
+import Dashboardpercentage from '../../components/manager/dashboard/Dashboardpercentage.vue';
 </script>

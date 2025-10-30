@@ -300,37 +300,85 @@ class ReportingController extends Controller
         return response()->json(array_values($combined));
     }
 
-    public function expensePieChart(Request $request)
-    {
-        $user = Auth::user();
+public function expensePieChart(Request $request)
+{
+    $user = Auth::user();
 
-        $query = Expense::select(
-            'categories.name as category',
-            DB::raw('SUM(expenses.amount) as total')
-        )
-            ->join('categories', 'expenses.category_id', '=', 'categories.id')
-            ->groupBy('categories.name');
+    // ✅ Expense by category
+    $expenseQuery = Expense::select(
+        'categories.id as category_id',
+        'categories.name as category',
+        DB::raw('SUM(expenses.amount) as total')
+    )
+        ->join('categories', 'expenses.category_id', '=', 'categories.id')
+        ->groupBy('categories.id', 'categories.name');
 
-        if ($user->role === 'manager') {
-            $query->where('expenses.user_id', $user->id);
-        }
+    if ($user->role === 'manager') {
+        $expenseQuery->where('expenses.user_id', $user->id);
+    }
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('expenses.expense_date', [$request->start_date, $request->end_date]);
-        }
+    if ($request->start_date && $request->end_date) {
+        $expenseQuery->whereBetween('expenses.expense_date', [$request->start_date, $request->end_date]);
+    }
 
-        $data = $query->get();
+    $categories = $expenseQuery->get();
 
-        $total = $data->sum('total');
-        $pieData = $data->map(function ($item) use ($total) {
-            $item->percentage = $total > 0 ? round(($item->total / $total) * 100, 2) : 0;
+    // ✅ Donation breakdown
+    $donationQuery = Donation::select(
+        'donation_types.name as donation_type',
+        DB::raw('SUM(donations.amount) as total')
+    )
+        ->join('donation_types', 'donations.donation_type_id', '=', 'donation_types.id')
+        ->groupBy('donation_types.name');
 
-            return $item;
+    if ($user->role === 'manager') {
+        $donationQuery->where('donations.user_id', $user->id);
+    }
+
+    if ($request->start_date && $request->end_date) {
+        $donationQuery->whereBetween('donations.created_at', [$request->start_date, $request->end_date]);
+    }
+
+    $donationData = $donationQuery->get();
+
+    // ✅ Calculate total donation amount
+    $totalDonation = $donationData->sum('total');
+
+    // ✅ Find or add donation category
+    $donationCategory = $categories->first(fn($c) => strtolower(trim($c->category)) === 'donation');
+
+    if ($totalDonation > 0) {
+        // Har type ka percentage calculate
+        $donationTypes = $donationData->map(function ($d) use ($totalDonation) {
+            return [
+                'name' => $d->donation_type,
+                'total' => $d->total,
+                'percentage' => $totalDonation > 0 ? round(($d->total / $totalDonation) * 100, 2) : 0,
+            ];
         });
 
-        return response()->json($pieData);
-
+        if ($donationCategory) {
+            $donationCategory->types = $donationTypes;
+            $donationCategory->total = $totalDonation;
+        } else {
+            $categories->push((object)[
+                'category' => 'Donation',
+                'total' => $totalDonation,
+                'types' => $donationTypes
+            ]);
+        }
     }
+
+    // ✅ Overall percentage
+    $total = $categories->sum('total');
+
+    $final = $categories->map(function ($item) use ($total) {
+        $item->percentage = $total > 0 ? round(($item->total / $total) * 100, 2) : 0;
+        return $item;
+    });
+
+    return response()->json($final);
+}
 
     public function filter(Request $request)
     {

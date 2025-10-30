@@ -13,7 +13,7 @@
     <DashboardBreakdown />
 
 
-    <DashboardMonthly />
+    <Dashboardpercentage />
 
 
   </div>
@@ -23,7 +23,7 @@
 
 import DashboardBreakdown from '../../components/admin/dashboard/DashboardBreakdown.vue';
 import DashboardOverall from '../../components/admin/dashboard/DashboardOverall.vue';
-import DashboardMonthly from '../../components/manager/dashboard/DashboardMonthly.vue';
+import Dashboardpercentage from '../../components/admin/dashboard/Dashboardpercentage.vue';
 
 
 

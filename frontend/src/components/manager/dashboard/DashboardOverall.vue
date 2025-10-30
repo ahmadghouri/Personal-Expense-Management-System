@@ -5,7 +5,6 @@
         <!-- Total Expenses Card -->
         <div
             class="group relative overflow-hidden bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-6 hover:shadow-2xl transition-all duration-300">
-
             <div class="relative z-10">
                 <div class="flex items-center justify-between mb-4">
                     <div class="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg">
