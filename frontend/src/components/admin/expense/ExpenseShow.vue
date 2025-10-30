@@ -163,7 +163,7 @@ function closePopup() {
 
     <div v-if="showPopup" class="fixed inset-0 bg-black/50  backdrop-blur-sm flex items-center justify-center z-50"
       @click.self="closePopup">
-      <div class="relative bg-white p-3 rounded-xl shadow-2xl">
+      <div class="relative p-3 rounded-xl">
         <button @click="closePopup"
           class="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center">
           ✕
