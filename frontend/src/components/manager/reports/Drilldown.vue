@@ -1,27 +1,18 @@
 <template>
     <div class=" bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 pt-6">
         <div class=" mx-auto">
-            <!-- Header with Back Button -->
             <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <button @click="goBack"
-                            class="bg-gray-200 hover:bg-gray-300 p-3 rounded-xl transition-all transform hover:scale-105">
-                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                            </svg>
-                        </button>
+
                         <div>
                             <h1
                                 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                                Expense Details - {{ categoryName }}
+                                Expense Details - {{ categoryName || 'Select Category' }}
                             </h1>
-                            <p class="text-gray-600 mt-1">Detailed breakdown of all expenses</p>
                         </div>
                     </div>
 
-                    <!-- Category Selector -->
                     <div class="flex items-center gap-3">
                         <select v-model="selectedCategoryId" @change="fetchDrilldown"
                             class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all font-medium">
@@ -34,10 +25,8 @@
                 </div>
             </div>
 
-            <!-- Loading State -->
-           <ClipLoader v-if="loading" color="#f59e0b" size="50px" class="m-6 text-center items-center" />
+          <ClipLoader v-if="loading" color="#f59e0b" size="50px" class="m-6 text-center items-center" />
 
-            <!-- No Data State -->
             <div v-else-if="!loading && expenses.length === 0" class="bg-white rounded-2xl shadow-xl p-12 text-center">
                 <svg class="w-20 h-20 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -47,9 +36,9 @@
                 <p class="text-sm text-gray-500 mt-2">Select a category to view expense details</p>
             </div>
 
-            <!-- Summary Cards -->
+          
             <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <!-- Total Amount -->
+               
                 <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
@@ -65,7 +54,7 @@
                     </div>
                 </div>
 
-                <!-- Total Entries -->
+              
                 <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-xl p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
@@ -81,7 +70,7 @@
                     </div>
                 </div>
 
-                <!-- Average Amount -->
+                
                 <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-xl p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
@@ -97,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Table View Toggle -->
+
             <div v-if="expenses.length > 0" class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-6 border-b border-gray-200">
                     <h2 class="text-xl font-bold text-gray-800">Detailed Table View</h2>
@@ -120,7 +109,7 @@
                                 class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ expense.id }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800">
-                                    <div class="font-semibold">{{ expense.category?.name }}</div>
+                                    <div class="font-semibold">{{`Donation - ${expense.donation_type}` || expense.category?.name }}</div>
                                     <div v-if="expense.subcategory" class="text-xs text-gray-500">{{ expense.subcategory
                                     }}</div>
                                 </td>
@@ -134,7 +123,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
-                                    {{ formatDate(expense.expense_date) }}
+                                    {{ formatDate(expense.date ||expense.expense_date) }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     <span class="line-clamp-2">{{ expense.description || '-' }}</span>
@@ -150,11 +139,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute} from 'vue-router';
 import api from '../../../Api/AxiosBase';
 
 const route = useRoute();
-const router = useRouter();
 
 const expenses = ref([]);
 const totalAmount = ref(0);
@@ -167,6 +155,7 @@ const averageAmount = computed(() => {
     if (expenses.value.length === 0) return 0;
     return totalAmount.value / expenses.value.length;
 });
+
 
 const formatCurrency = (amount) => {
     const numAmount = parseFloat(amount);
@@ -214,9 +203,11 @@ const fetchDrilldown = async () => {
     loading.value = true;
     try {
         const response = await api.get(`/reports/drilldown/${selectedCategoryId.value}`);
-        expenses.value = response.data.expenses || [];
+        expenses.value = response.data.records || [];
+        
         totalAmount.value = parseFloat(response.data.total_amount) || 0;
 
+        // Get category name
         const category = categories.value.find(c => c.id == selectedCategoryId.value);
         categoryName.value = category?.name || 'Unknown Category';
     } catch (error) {
@@ -228,7 +219,6 @@ const fetchDrilldown = async () => {
         loading.value = false;
     }
 };
-
 
 
 onMounted(async () => {
@@ -243,7 +233,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* Line clamp utility */
 .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

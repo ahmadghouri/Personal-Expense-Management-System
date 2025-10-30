@@ -8,7 +8,7 @@
                         <div>
                             <h1
                                 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                                Expense Details - {{ categoryName }}
+                                Expense Details - {{ categoryName || "Select Category" }}
                             </h1>
                         </div>
                     </div>

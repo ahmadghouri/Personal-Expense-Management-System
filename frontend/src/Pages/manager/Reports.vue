@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import Drilldown from '../../components/admin/reports/Drilldown.vue';
+import Drilldown from '../../components/manager/reports/Drilldown.vue';
 import Filter from '../../components/manager/reports/Filter.vue';
 import TopCategory from '../../components/manager/reports/TopCategory.vue';
 
