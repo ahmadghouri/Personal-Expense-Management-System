@@ -77,59 +77,99 @@ function closeModal() {
 
 
 <template>
-    <transition name="fade">
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm">
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative animate-fade-in-up">
-                <!-- Close Button -->
-                <button @click="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl">
-                    <i class="pi pi-times text-xl"></i>
-                </button>
+  <transition name="fade">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative animate-fade-in-up">
+        <!-- Close Button -->
+        <button
+          @click="closeModal"
+          class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors"
+          aria-label="Close modal"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-6 h-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
 
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
-                    {{ props.user ? '✏️ Edit User' : '👤 Create New User' }}
-                </h2>
+        <!-- Title -->
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+          {{ props.user ? '✏️ Edit User' : '👤 Create New User' }}
+        </h2>
 
-                <form @submit.prevent="submitForm" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                        <input v-model="name" type="text" placeholder="Enter full name"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-amber-500 focus:outline-none" />
-                    </div>
+        <!-- Form -->
+        <form @submit.prevent="submitForm" class="space-y-4">
+          <!-- Name -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <input
+              v-model="name"
+              type="text"
+              placeholder="Enter full name"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-amber-500 focus:outline-none"
+            />
+          </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <input v-model="email" type="email" placeholder="Enter email address"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-amber-500 focus:outline-none" />
-                    </div>
-                    <!-- Password Field -->
-                    <div v-if="!props.user" class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <input v-model="password" type="password" placeholder="Enter password"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-amber-500 focus:border-amber-500" />
-                    </div>
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              v-model="email"
+              type="email"
+              placeholder="Enter email address"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-amber-500 focus:outline-none"
+            />
+          </div>
 
+          <!-- Password (only for new user) -->
+          <div v-if="!props.user">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input
+              v-model="password"
+              type="password"
+              placeholder="Enter password"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-amber-500 focus:outline-none"
+            />
+          </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                        <select v-model="role"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-amber-500 focus:outline-none">
-                            <option v-for="option in roleOptions" :key="option" :value="option">
-                                {{ option.charAt(0) + option.slice(1) }}
-                            </option>
-                        </select>
-                    </div>
+          <!-- Role -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+            <select
+              v-model="role"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-amber-500 focus:outline-none"
+            >
+              <option
+                v-for="option in roleOptions"
+                :key="option"
+                :value="option"
+              >
+                {{ option.charAt(0).toUpperCase() + option.slice(1) }}
+              </option>
+            </select>
+          </div>
 
-                    <div class="pt-3">
-                        <button type="submit"
-                            class="w-full bg-amber-600 text-white py-2.5 rounded-md hover:bg-amber-700 transition-all duration-200">
-                            {{ props.user ? 'Update User' : 'Create User' }}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </transition>
+          <!-- Submit Button -->
+          <div class="pt-3">
+            <button
+              type="submit"
+              class="w-full bg-amber-600 text-white py-2.5 rounded-md hover:bg-amber-700 transition-all duration-200"
+            >
+              {{ props.user ? 'Update User' : 'Create User' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </transition>
 </template>
+
 
 <style scoped>
 .fade-enter-active,
