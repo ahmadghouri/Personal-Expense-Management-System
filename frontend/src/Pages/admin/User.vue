@@ -50,70 +50,26 @@ function handleUpdate(updatedUser) {
 </script>
 
 <template>
-  <!-- Top Bar -->
- <div
-    class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 sm:p-5 shadow-lg rounded-xl mt-6 gap-3 sm:gap-0 border border-gray-100"
-  >
-    <!-- Search Input -->
-    <div class="relative w-full sm:max-w-sm">
-      <input
-        type="text"
-        placeholder="Search User"
-        v-model="searchQuery"
-        class="w-full h-11 pl-4 pr-11 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition"
-      />
+    <!-- Top Bar -->
+    <div class="flex justify-between items-center bg-white p-4 shadow-md rounded-md mt-6">
+        <!-- Search Input -->
+        <div class="relative max-w-sm w-full">
+            <input type="text" placeholder="Search User"
+                class="w-full h-10 pl-4 pr-10 border rounded-md focus:outline-none focus:ring-amber-500"
+                v-model="searchQuery" />
+            <i class="pi pi-search absolute right-3 top-3 text-gray-500"></i>
+        </div>
 
-      <!-- SVG Search Icon -->
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="2"
-        stroke="currentColor"
-        class="w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z"
-        />
-      </svg>
+        <!-- Create Button -->
+        <div class="flex items-center bg-amber-600 text-white px-6 py-2 rounded-md hover:bg-amber-500 transition cursor-pointer gap-2"
+            @click="openModal">
+            <i class="pi pi-plus text-sm"></i>
+            <span>Create User</span>
+        </div>
     </div>
 
-    <!-- Create Button -->
-    <button
-      @click="openModal"
-      class="flex items-center justify-center gap-2 bg-amber-600 text-white px-6 py-2.5 rounded-lg hover:bg-amber-500 active:bg-amber-700 transition-all duration-200 shadow-sm"
-    >
-      <!-- SVG Plus Icon -->
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="2"
-        stroke="currentColor"
-        class="w-5 h-5 text-white"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 4v16m8-8H4"
-        />
-      </svg>
+    <UserRegister v-if="showModal" :user="selectedUser" @close="showModal = false" @update="handleUpdate"
+        :allUser="allUser" />
 
-      <span class="font-medium text-sm">Create User</span>
-    </button>
-  </div>
-
-  <!-- Modal -->
-  <UserRegister
-    v-if="showModal"
-    :user="selectedUser"
-    @close="showModal = false"
-    @update="handleUpdate"
-    :allUser="allUser"
-  />
-
-  <!-- User List -->
-  <UserShow :users="filterUser" :allUser="allUser" :isLoadind="isLoadind" />
+    <UserShow :users="filterUser" :allUser="allUser" :isLoadind="isLoadind" />
 </template>

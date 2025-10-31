@@ -79,7 +79,7 @@ function closeModal() {
 <template>
     <transition name="fade">
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm">
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative animate-fade-in-up">
                 <!-- Close Button -->
                 <button @click="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl">
                     <i class="pi pi-times text-xl"></i>
